@@ -1,28 +1,59 @@
 {
-    "name": "Get Google Tag Manager Size",
+    "name": "Ecommerce Datalayer Tool",
+    "description":"Esta extensão possui ferramentas que auxiliam na análise da camada de dados de um site de ecommerce, permitindo verificar se os eventos do comércio eletrônico estão de acordo com o padrão do Google Analytics 4",
     "version": "1.1.2",
     "manifest_version": 3,
     "permissions": [
-        "webRequest"
+        "webRequest",
+        "webNavigation",
+        "scripting",
+        "activeTab",
+        "tabs",
+        "nativeMessaging", 
+        "notifications",
+        "storage"
     ],
-    "host_permissions": [ "*://*/*" ],
+    "host_permissions": [ 
+        "<all_urls>",
+        "http://*/*",
+        "https://*/*",
+        "*://*/*" 
+    ],
+    "content_scripts":[
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"],
+            "all_frames": true
+        }
+    ],
+    "web_accessible_resources": [{
+        "resources": ["observer_datalayer_changes.js"],
+        "matches": ["<all_urls>"]
+    }],  
+    "externally_connectable":{
+        "ids":["*"],
+        "matches": [
+            "<all_urls>"
+        ],
+        "accepts_tls_channel_id": false
+    },
     "background": {
         "service_worker": "background.js"
     },
     "action": {
         "default_title": "Get Google Tag Manager Size",
         "default_icon": {
-            "16": "icon-16x16.png",
-            "38": "icon-38x38.png",
-            "48": "icon-48x48.png",
-            "128": "icon-128x128.png"
+            "16": "icon16.png",
+            "38": "icon38.png",
+            "48": "icon48.png",
+            "128": "icon128.png"
         },
         "default_popup": "popup.html"
     },
     "icons": {
-        "16": "icon-16x16.png",
-        "38": "icon-38x38.png",
-        "48": "icon-48x48.png",
-        "128": "icon-128x128.png"
+        "16": "icon16.png",
+        "38": "icon38.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
     }
 }

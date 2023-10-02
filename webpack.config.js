@@ -45,23 +45,31 @@ module.exports = {
                     to: path.resolve("dist")
                 },
                 { 
-                    from: path.resolve("src/static/icon-16x16.png"),
+                    from: path.resolve("src/static/icon16.png"),
                     to: path.resolve("dist")
                 },
                 { 
-                    from: path.resolve("src/static/icon-38x38.png"),
+                    from: path.resolve("src/static/icon38.png"),
                     to: path.resolve("dist")
                 },
                 { 
-                    from: path.resolve("src/static/icon-48x48.png"),
+                    from: path.resolve("src/static/icon48.png"),
                     to: path.resolve("dist")
                 },
                 { 
-                    from: path.resolve("src/static/icon-128x128.png"),
+                    from: path.resolve("src/static/icon128.png"),
                     to: path.resolve("dist")
                 },
                 { 
                     from: path.resolve("src/background.js"),
+                    to: path.resolve("dist")
+                },
+                { 
+                    from: path.resolve("src/content.js"),
+                    to: path.resolve("dist")
+                },
+                { 
+                    from: path.resolve("src/observer_datalayer_changes.js"),
                     to: path.resolve("dist")
                 },
             ]
@@ -77,12 +85,13 @@ module.exports = {
                     </body>
                 </html>
             `
-        })
+        }),
     ],
     resolve: {
         extensions: ['.js']
     },
     output: {
         filename: "[name].js"
-    }
+    },
+    
 }

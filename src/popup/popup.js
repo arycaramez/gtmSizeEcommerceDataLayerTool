@@ -2,32 +2,61 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import "../assets/tailwind.css";
+import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 
 function App () {
-    const [containerSize, setContainerSize] = useState({ result: 0, percent: 0});
-    useEffect(() => {
-        chrome.runtime.sendMessage("open", function(response) {
-            setContainerSize(
-                { 
-                    result: response.result, 
-                    percent: response.percent || null
-                })
-        });
-    }, [])
+    // const [containerSize, setContainerSize] = useState({ result: 0, percent: 0});
+    // useEffect(() => {
+    //     chrome.runtime.sendMessage("open", function(response) {
+    //         setContainerSize(
+    //             { 
+    //                 result: response.result, 
+    //                 percent: response.percent || null
+    //             })
+    //     });
+    // }, [])
+    const [dataLayer, setDataLayer] = useState([]);
+
+    // Requisita uma atualização da camada de dados quando o usuário clica no icone da extensão.
+    chrome.runtime.sendMessage({ action: 'get_datalayer' }, function(response){
+        if (response && response !== dataLayer && response.length !== dataLayer.length) {
+            setDataLayer(response);
+        }
+    });
+    // Atualiza a camada de dados quando há uma atualização na camada de dados do site monitorado.
+    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+        if (request.action === 'update_datalayer') {
+            if(request.data && request.data !== dataLayer && request.data.length !== dataLayer.length){
+                setDataLayer(request.data || []);
+                console.log('request.data: ',request.data);
+            }
+        }
+    });
+    // Executa
+    useEffect(()=>{
+        console.log('Datalayer foi alterado!');
+    },[dataLayer]);
     
     return (
         <div className="w-[19.875rem] rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900 shadow-xl shadow-black/5 ring-1 ring-slate-700/10">
             <div className="flex flex-col p-4 pb-0">
-                <div className="ml-4 flex-auto">
-                    <div className="font-medium">Google Tag Manager Size</div>
-                    {containerSize.result ? (
-                        <div className="mt-1 text-slate-500">Your container has: <span className="font-medium">{containerSize.result}</span></div>
+                <div className="flex-auto">
+                    <div className="font-medium">Ecommerce Datalayer Tool</div>
+                    {dataLayer ? (
+                        <div className="mt-1 text-slate-500">Your dataLayer has: <span className="font-medium">{dataLayer.length} Event{dataLayer.length > 0? "s":""}</span></div>
                     ) : (
-                        <div className="mt-1 text-slate-500 pb-5">There is no container in this page refresh the page{`:/`}</div>
+                        <div className="mt-1 text-slate-500 pb-5">There is no Events in this page refresh the page{`:/`}</div>
                     )}
                 </div>
+                {dataLayer && (
+                    <>
+                        <div className="flex-auto py-5">
+                            
+                        </div>
+                    </>
+                ) }
 
-                {containerSize.result && (
+                {/* {containerSize.result && (
                     <>
                         <div className="ml-4 flex-auto py-5">
                             <h2 className="font-medium">What does that mean?</h2>
@@ -60,7 +89,7 @@ function App () {
                             </ul>
                         </div>
                     </>
-                )}
+                )} */}
             </div>
         </div>
     )
