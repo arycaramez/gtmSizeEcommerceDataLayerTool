@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import {Collapse,Ripple,initTE} from 'tw-elements';// Recursos extra para o módulo tailwind.
 
 import "../assets/tailwind.css";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 
+// Scripts para realizar a homologação da camada de dados.
+import {ecommerce_events_ga4} from "../event_models/ecommerce_events_ga4.js";// modelo base usado na comparação.
+import {compararDatalayerComObjeto} from "../modules/ecommerce_datalayer_analyzer.js";// Comparador da camada de dados.
+import EcommerceAnalyzerView from "../components/ecomDatalayerAnalyzerView";// Componente usado para criar a lista de eventos analizados para que o usuário possa ver.
+
+
 function App () {
+    initTE({Collapse,Ripple});
     // const [containerSize, setContainerSize] = useState({ result: 0, percent: 0});
     // useEffect(() => {
     //     chrome.runtime.sendMessage("open", function(response) {
@@ -16,45 +24,50 @@ function App () {
     //     });
     // }, [])
     const [dataLayer, setDataLayer] = useState([]);
+    const [analysis,setAnalysis] = useState([]);
+
+    // Função usada para atualizar a camada de dados 
+    function UpdateDataLayer(data){
+        if (data && data !== dataLayer && data.length !== dataLayer.length) {
+            setDataLayer(data || []);
+        }
+    }
 
     // Requisita uma atualização da camada de dados quando o usuário clica no icone da extensão.
     chrome.runtime.sendMessage({ action: 'get_datalayer' }, function(response){
-        if (response && response !== dataLayer && response.length !== dataLayer.length) {
-            setDataLayer(response);
-        }
+        UpdateDataLayer(response);
     });
+
     // Atualiza a camada de dados quando há uma atualização na camada de dados do site monitorado.
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         if (request.action === 'update_datalayer') {
-            if(request.data && request.data !== dataLayer && request.data.length !== dataLayer.length){
-                setDataLayer(request.data || []);
-                console.log('request.data: ',request.data);
-            }
+            UpdateDataLayer(request.data);
         }
     });
-    // Executa
+
+    // Executa toda vez que o valor do dataLayer for atualizado. 
     useEffect(()=>{
-        console.log('Datalayer foi alterado!');
+        // Analiza a camada de dados quando há uma atualização nela, retorna o resultado da analise.
+        var analise = compararDatalayerComObjeto(dataLayer,ecommerce_events_ga4);
+        setAnalysis(analise || []);
     },[dataLayer]);
     
     return (
-        <div className="w-[19.875rem] rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900 shadow-xl shadow-black/5 ring-1 ring-slate-700/10">
+        <div className="w-[500px] max-h-[700px] min-h-[500px] rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900 shadow-xl shadow-black/5 ring-1 ring-slate-700/10">
             <div className="flex flex-col p-4 pb-0">
                 <div className="flex-auto">
-                    <div className="font-medium">Ecommerce Datalayer Tool</div>
+                    <div className="font-medium text-[1.25rem] "> <i class="fa-solid fa-cart-shopping"></i> Ecommerce Datalayer Tool</div>
                     {dataLayer ? (
-                        <div className="mt-1 text-slate-500">Your dataLayer has: <span className="font-medium">{dataLayer.length} Event{dataLayer.length > 0? "s":""}</span></div>
+                        <div className="mt-1 text-slate-500">Eventos do comércio eletrônico encontrados: <span className="font-medium">{analysis.length+"/"+dataLayer.length}.</span> </div>
                     ) : (
                         <div className="mt-1 text-slate-500 pb-5">There is no Events in this page refresh the page{`:/`}</div>
                     )}
                 </div>
-                {dataLayer && (
-                    <>
-                        <div className="flex-auto py-5">
-                            
-                        </div>
-                    </>
-                ) }
+                <>
+                    <div className="flex-auto py-2.5">    
+                        <EcommerceAnalyzerView analysis={analysis}/>
+                    </div>
+                </>
 
                 {/* {containerSize.result && (
                     <>

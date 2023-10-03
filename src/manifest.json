@@ -4,12 +4,12 @@
     "version": "1.1.2",
     "manifest_version": 3,
     "permissions": [
-        "webRequest",
-        "webNavigation",
+        "nativeMessaging",
+        "bookmarks",
         "scripting",
         "activeTab",
         "tabs",
-        "nativeMessaging", 
+        "webNavigation", 
         "notifications",
         "storage"
     ],
@@ -41,7 +41,7 @@
         "service_worker": "background.js"
     },
     "action": {
-        "default_title": "Get Google Tag Manager Size",
+        "default_title": "Ecommerce Datalayer Tool",
         "default_icon": {
             "16": "icon16.png",
             "38": "icon38.png",

@@ -90,19 +90,21 @@
 var dataLayer = [];
 
 // Recebe os dados enviados do script observer_datalayer_changes injetado no site.
-chrome.runtime.onMessageExternal.addListener((message, sender, sendResponse) => {
-  if(message.dataLayer){
-      console.log("Dados recebidos da página da web: ",message.dataLayer);
-      var t_dataLayer = message.dataLayer;
-      if(dataLayer !== t_dataLayer && dataLayer.length !== t_dataLayer.length){
-        dataLayer = t_dataLayer;
-        
-        console.log("dataLayer saved: ", dataLayer);
+chrome.runtime.onMessageExternal.addListener(async (message, sender, sendResponse) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        if(tabs.length <= 0) return;
 
-        // Evento usado para que a página da extensão atualize os dados caso alguma alteração tenha ocorrido na camada de dados
-        chrome.runtime.sendMessage({ action: 'update_datalayer' , data: t_dataLayer});
-    }
-  }
+        // Verifica se o id da aba aberta é o mesmo da aba que enviou os dados.
+        if(message.dataLayer && sender.tab.id === tabs[0].id){
+            var t_dataLayer = message.dataLayer;
+            if(dataLayer !== t_dataLayer && dataLayer.length !== t_dataLayer.length){
+                dataLayer = t_dataLayer;
+
+                // Evento usado para que a página da extensão atualize os dados caso alguma alteração tenha ocorrido na camada de dados
+                chrome.runtime.sendMessage({ action: 'update_datalayer' , data: t_dataLayer});
+            }
+        }
+    });
 });
 
 // Envia o dataLayer quando o evento "get_datalayer" é disparado na extensão.
@@ -111,3 +113,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse(dataLayer);
     }
 });
+
+

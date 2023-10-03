@@ -27,7 +27,6 @@ function observeDataLayerChanges() {
       console.log(response);
     });
   });
-
 }
 
 observeDataLayerChanges();

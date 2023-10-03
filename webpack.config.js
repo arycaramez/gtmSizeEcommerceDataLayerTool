@@ -72,6 +72,22 @@ module.exports = {
                     from: path.resolve("src/observer_datalayer_changes.js"),
                     to: path.resolve("dist")
                 },
+                {
+                    from: path.resolve("src/event_models/ecommerce_events_ga4.js"),
+                    to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/modules/ecommerce_datalayer_analyzer.js"),
+                    to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/components/ecomDatalayerAnalyzerView.js"),
+                    to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/components/ecomDatalayerAnalyzerViewElement.js"),
+                    to: path.resolve("dist")
+                }
             ]
         }),
         new HtmlPlugin({
@@ -85,13 +101,12 @@ module.exports = {
                     </body>
                 </html>
             `
-        }),
+        })
     ],
     resolve: {
         extensions: ['.js']
     },
     output: {
         filename: "[name].js"
-    },
-    
+    }
 }
