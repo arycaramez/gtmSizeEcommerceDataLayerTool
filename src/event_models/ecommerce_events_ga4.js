@@ -1,3 +1,58 @@
+
+
+const validation = {
+  general: {
+    paramValueMaxSize: 100,
+    eventNameMaxSize: 40,
+    eventMaxParameters: 25,
+    user_properties: {
+      user_id:{
+        maxSize: 256,
+      },
+      
+    },
+    for_all_properties: {
+    },
+    for_games: {
+
+    },
+    for_ecommerce: {
+      currency: {
+        type: 'string',
+        required: true,
+        example: "USD",
+      },
+      value: {
+        type: 'number',
+        required: true,
+        example: "7.77",
+      },
+      coupon: {
+        type: 'number',
+        required: true,
+        example: "7.77",
+      },
+      add_payment_info: {
+        payment_type:  {
+          type: 'string',
+          required: false,
+          example: "Cartão de crédito",
+          description: "Forma de pagamento escolhida.",
+        },
+        included: ["value", "currency", "coupon", "items"]
+      },
+      purchase: {
+        transaction_id:{
+          type: 'number',
+          required: true,
+          example: "7.77",
+        },
+        included: ["value", "currency", "coupon", "items"]
+      }
+    },
+  },
+}
+
 const ecommerce_events_ga4 = 
 [
   {
