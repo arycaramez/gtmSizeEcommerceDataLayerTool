@@ -81,11 +81,15 @@ module.exports = {
                     to: path.resolve("dist")
                 },
                 {
-                    from: path.resolve("src/components/ecomDatalayerAnalyzerView.js"),
+                    from: path.resolve("src/components/ApprovalDisplayListVisualizer.js"),
                     to: path.resolve("dist")
                 },
                 {
-                    from: path.resolve("src/components/ecomDatalayerAnalyzerViewElement.js"),
+                    from: path.resolve("src/components/ApprovalDisplayCollapse.js"),
+                    to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/components/ApprovalDisplayTreeView.js"),
                     to: path.resolve("dist")
                 }
             ]

@@ -74,7 +74,7 @@ function compararPropriedade(valorDatalayer, valorBase, propNome) {
     resultado = [];
     if (tipoDatalayer === undefined || tipoDatalayer === "undefined"){
       resultado.important = true;
-      resultado.log = `Verificar a implementação do propriedade <strong>'${propNome}'</strong> (tipo 'undefined')`;
+      resultado.log = `Verificar a propriedade <strong>'${propNome}'</strong> (tipo 'undefined')`;
     } else if(valorDatalayer === null) {
       resultado.important = true;
       resultado.log = `A propriedade <strong>'${propNome}'</strong> possui um valor nulo (null).`;
@@ -82,8 +82,13 @@ function compararPropriedade(valorDatalayer, valorBase, propNome) {
       resultado.important = true;
       resultado.log = `A propriedade <strong>'${propNome}'</strong> deveria receber o valor de tipo "${tipoBase}".`;
     } else if(tipoDatalayer === tipoBase){
-      resultado.important = false;
-      resultado.log = `O tipo de valor da propriedade <strong>'${propNome}'</strong> está correto (${tipoBase}).`;
+      if(valorDatalayer === ""){
+        resultado.important = true;
+        resultado.log = `A propriedade <strong>'${propNome}'</strong> está recebendo um texto (string) vazio.`;
+      }else{
+        resultado.important = false;
+        resultado.log = `O tipo de valor da propriedade <strong>'${propNome}'</strong> está correto (${tipoBase}).`;
+      }
     }    
     return resultado;
 }
