@@ -42,7 +42,7 @@ const ApprovalDisplayCollapse = (props) =>{
                 </a>
                 <div className ="!visible hidden" id={props.collapseId} data-te-collapse-item>
                     <div className ="block rounded-lg bg-gray-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] gray:bg-neutral-700 gray:text-neutral-50">
-                        <ApprovalDisplayTreeView data={GetElementsExeptEventName(data)}/>
+                        <ApprovalDisplayTreeView data={GetElementsExeptEventName(data)} collapseID={props.collapseId}/>
                     </div>
                 </div>
             </div>            

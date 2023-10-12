@@ -91,6 +91,10 @@ module.exports = {
                 {
                     from: path.resolve("src/components/ApprovalDisplayTreeView.js"),
                     to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/modules/ecommerce_datalayer_validator.js"),
+                    to: path.resolve("dist")
                 }
             ]
         }),
