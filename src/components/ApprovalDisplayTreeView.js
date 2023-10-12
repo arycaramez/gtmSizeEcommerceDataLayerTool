@@ -1,6 +1,8 @@
 import React, {Fragment, useEffect, useState} from "react";
 import { Collapse, initTE, Ripple} from "tw-elements"; 
 
+import ApprovalDisplayTreeViewCollapse from "./ApprovalDisplayTreeViewCollapse";
+
 const ApprovalDisplayTreeView = (props) => {
     const [data, setData] = useState(props.data || [])
 
@@ -29,27 +31,6 @@ const ApprovalDisplayTreeView = (props) => {
             default: break;
         }
         return iconList.errorIcon; 
-    }
-
-    const changeIcon = (event) =>{
-        
-        // Acesse o elemento <a> que acionou o clique
-        const clickedElement = event.target;
-        
-        // Lógica para alterar o ícone
-        console.log('Clique no elemento <a>!', clickedElement);
-
-        // Exemplo: Alterar a classe do ícone
-        const iconElement = clickedElement.closest('a').querySelector('i');
-        console.log('i: ', iconElement);
-        if (iconElement) {
-            
-            if(iconElement.className === iconList.openIcon){
-                iconElement.className = iconList.closedIcon;
-            }else if(iconElement.className === iconList.closedIcon){
-                iconElement.className = iconList.openIcon;
-            }
-        }
     }
 
     const rendererStateMessage = (item) => {
@@ -100,30 +81,12 @@ const ApprovalDisplayTreeView = (props) => {
         }else{
             if(key !== "logs" && key !== "show_list_id" && (keyIsNaN || !keyIsNaN && checkShowListID)){
                 message = (
-                    <ul>
-                        <li >
-                            <a
-                            data-te-collapse-init
-                            data-te-ripple-init
-                            data-te-ripple-color="light"
-                            href={`#${id_element}`}
-                            role="button"
-                            aria-expanded="true"
-                            aria-controls="multiCollapseExample1"
-                            onClick={changeIcon}
-                            >
-                                <i className={iconList.closedIcon}></i>
-                                <strong>{key}</strong>
-                            </a>
-                        </li>
-                        <ul 
-                        data-te-collapse-item 
-                        id={id_element}
-                        className={`multi-collapse !visible hidden ml-4 mt-1 mb-1`}
-                        >
-                            <>{renderizarItem(item[key],id_element,key)}</>
-                        </ul>
-                    </ul>
+                    <ApprovalDisplayTreeViewCollapse
+                    id_element={id_element}
+                    title={key}
+                    >
+                        <>{renderizarItem(item[key],id_element,key)}</>
+                    </ApprovalDisplayTreeViewCollapse>
                 );
             }else{
                 message = ( <> {renderizarItem(item[key],id_element,key)} </> );

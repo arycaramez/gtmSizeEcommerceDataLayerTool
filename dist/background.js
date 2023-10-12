@@ -92,12 +92,12 @@ var dataLayer = [];
 // Recebe os dados enviados do script observer_datalayer_changes injetado no site.
 chrome.runtime.onMessageExternal.addListener(async (message, sender, sendResponse) => {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        if(tabs.length <= 0) return;
+        if(tabs.length <= 0) return; // não execute caso não tenham abas abertas
 
         // Verifica se o id da aba aberta é o mesmo da aba que enviou os dados.
         if(message.dataLayer && sender.tab.id === tabs[0].id){
             var t_dataLayer = message.dataLayer;
-            if(dataLayer !== t_dataLayer && dataLayer.length !== t_dataLayer.length){
+            if(dataLayer !== t_dataLayer){//&& dataLayer.length !== t_dataLayer.length){
                 dataLayer = t_dataLayer;
 
                 // Evento usado para que a página da extensão atualize os dados caso alguma alteração tenha ocorrido na camada de dados

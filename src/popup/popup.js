@@ -5,10 +5,8 @@ import "../assets/tailwind.css";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 
 // Scripts para realizar a homologação da camada de dados.
-// import {ecommerce_events_ga4} from "../event_models/ecommerce_events_ga4.js";// modelo base usado na comparação.
-// import {compararDatalayerComObjeto} from "../modules/ecommerce_datalayer_analyzer";// Comparador da camada de dados.
 import ApprovalDisplayListVisualizer from "../components/ApprovalDisplayListVisualizer";// Componente usado para criar a lista de eventos analizados para que o usuário possa ver.
-import GA4EcommerceEventValidator from "../modules/ecommerce_datalayer_validator";
+import GA4EcommerceEventValidator from "../modules/datalayer_validator";
 
 function App () {
     const [dataLayer, setDataLayer] = useState([]);

@@ -291,7 +291,7 @@ class GA4EcommerceEventValidator {
             ecommerce:{ 
                 logs:[],
                 show_list_id:false, 
-                
+
                 items: { 
                     logs:[],
                     show_list_id:true, 
@@ -316,6 +316,7 @@ class GA4EcommerceEventValidator {
         // Usado para validar se no parâmetro ecommerce existem itens faltando.
         for (const field in ecommerceData) {
             // console.log("valor",ecommerceData[field])
+            
             if(ecommerceData[field] === undefined || ecommerceData[field] === "undefined"){
                 validations.ecommerce.logs.push({
                     [field]: { 
@@ -330,7 +331,7 @@ class GA4EcommerceEventValidator {
                 if (![...optionalFields,...requiredFields, "items"].includes(field)) {
                     validations.ecommerce.logs.push({
                         [field]: { 
-                            log: `Parâmetro <strong>${field}</strong> não é esperado.`, 
+                            log: `Parâmetro <strong>${field}</strong> não foi encontrado.`, 
                             status: 'error',
                         }
                     });
@@ -349,7 +350,20 @@ class GA4EcommerceEventValidator {
                     continue;
                 }
             }
+
+            /*
+            if (typeof ecommerceData[field] === 'string' && String(ecommerceData[field]).trim() === '') {
+                validations.ecommerce.logs.push({
+                    [field]: { 
+                        log: `Parâmetro <strong>${field}</strong> está recebendo um texto vazio.`,
+                        status: 'error',
+                    }
+                });
+                continue;
+            }*/
         }
+
+        
         // Verifica se os parâmetros marcados para receber valores maiores que zero, fazem parte da lista.
         if(valueGreaterThanZero){
             for (const field of valueGreaterThanZero) {
@@ -492,6 +506,14 @@ class GA4EcommerceEventValidator {
                         }
                         continue;
                     }
+
+                    if (typeof value === 'string' && rule.type === 'string' && String(value).trim() === '') {
+                        info = { 
+                            log: `Parâmetro <strong>${field}</strong> está recebendo um texto vazio.`,
+                            status: 'error',
+                        };
+                        continue;
+                    }
                 }
 
                 info = {                        
@@ -499,9 +521,8 @@ class GA4EcommerceEventValidator {
                     status: 'success',
                 }
             } else {
-                
                 info = {                        
-                    log: `O parâmetro <strong>${field}</strong> não é esperado neste contexto.`,
+                    log: `Parâmetro <strong>${field}</strong> não esperado neste contexto.`,
                     status: 'error',
                 }
             }
@@ -534,145 +555,5 @@ class GA4EcommerceEventValidator {
         return dataLayerValidation;
     }
 }
-
-/*
-const dataLayer = [
-    {
-        "gtm.start": 1696829074926,
-        "event": "gtm.js",
-        "gtm.uniqueEventId": 1
-    },
-    {
-        "gtm.start": 1696829074930,
-        "event": "gtm.js",
-        "gtm.uniqueEventId": 7
-    },
-    {
-        "0": "js",
-        "1": "2023-10-09T05:24:35.076Z"
-    },
-    {
-        "0": "config",
-        "1": "G-FJZ5H9783N"
-    },
-    {
-        "ecommerce": null
-    },
-    {
-        "event": "view_item_list",
-        "ecommerce": {
-            "items": [
-                {
-                    "affiliation": "ITABIKE | SPECIALIZED Bikeshop: venda de bicicletas, peças, acessórios e serviços em Itapira",
-                    "coupon": null,
-                    "currency": "BRL",
-                    "discount": 0,
-                    "location_id": "home",
-                    "item_name": "Kit Sram Sport",
-                    "item_id": "74367",
-                    "price": 2798,
-                    "item_brand": "SRAM",
-                    "item_category": "Compre Mais e Pague Menos",
-                    "item_list_name": "Página Inicial - Compre Mais e pague Menos ",
-                    "item_list_id": "home",
-                    "index": 0,
-                    "quantity": 1,
-                    "item_variant": "PRETO"
-                },
-                // ... (outros itens de ecommerce)
-            ]
-        },
-        "gtm.uniqueEventId": 10
-    },
-    {
-        "event": "view_item_list",
-        "ecommerce": {
-            "items": [
-                {
-                    "affiliation": "ITABIKE | SPECIALIZED Bikeshop: venda de bicicletas, peças, acessórios e serviços em Itapira",
-                    "coupon": null,
-                    "currency": "BRL",
-                    "discount": 0,
-                    "location_id": "home",
-                    "item_name": "Kit Sram Sport",
-                    "item_id": "74367",
-                    "price": 2798,
-                    "item_brand": "SRAM",
-                    "item_category": "Compre Mais e Pague Menos",
-                    "item_list_name": "Página Inicial - Compre Mais e pague Menos ",
-                    "item_list_id": "home",
-                    "index": 0,
-                    "quantity": 1,
-                    "item_variant": "PRETO"
-                },
-                // ... (outros itens de ecommerce)
-            ]
-        },
-        "gtm.uniqueEventId": 10
-    },
-    {
-        "event": "view_item_list",
-        "ecommerce": {
-            "items": [
-                {
-                    "affiliation": "ITABIKE | SPECIALIZED Bikeshop: venda de bicicletas, peças, acessórios e serviços em Itapira",
-                    "coupon": null,
-                    "currency": "BRL",
-                    "discount": 0,
-                    "location_id": "home",
-                    "item_name": "Kit Sram Sport",
-                    "item_id": "74367",
-                    "price": 2798,
-                    "item_brand": "SRAM",
-                    "item_category": "Compre Mais e Pague Menos",
-                    "item_list_name": "Página Inicial - Compre Mais e pague Menos ",
-                    "item_list_id": "home",
-                    "index": 0,
-                    "quantity": 1,
-                    "item_variant": "PRETO"
-                },
-                // ... (outros itens de ecommerce)
-            ]
-        },
-        "gtm.uniqueEventId": 10
-    },
-    {
-        "event": "view_item_list",
-        "ecommerce": {
-            "item_list_name": null,
-            "item_list_id": "undefined",
-            "items": [
-                {
-                    "affiliation": "ITABIKE | SPECIALIZED Bikeshop: venda de bicicletas, peças, acessórios e serviços em Itapira",
-                    "coupon": null,
-                    "currency": "BRL",
-                    "discount": 0,
-                    "location_id": "home",
-                    "item_name": "Kit Sram Sport",
-                    "item_id": "74367",
-                    "price": 2798,
-                    "item_brand": "SRAM",
-                    "item_category": "Compre Mais e Pague Menos",
-                    "item_list_name": "Página Inicial - Compre Mais e pague Menos ",
-                    "item_list_id": "home",
-                    "index": 0,
-                    "quantity": 1,
-                    "item_variant": "PRETO"
-                },
-                // ... (outros itens de ecommerce)
-            ]
-        },
-        "gtm.uniqueEventId": 10
-    },
-    // ... (outros eventos)
-];*/
-
-
-// Exemplo de uso:
-/*const validator = new GA4EcommerceEventValidator();
-
-var teste = validator.validateDataLayer(dataLayer);
-
-console.log("teste",teste);*/
 
 module.exports = GA4EcommerceEventValidator

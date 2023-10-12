@@ -73,14 +73,6 @@ module.exports = {
                     to: path.resolve("dist")
                 },
                 {
-                    from: path.resolve("src/event_models/ecommerce_events_ga4.js"),
-                    to: path.resolve("dist")
-                },
-                {
-                    from: path.resolve("src/modules/ecommerce_datalayer_analyzer.js"),
-                    to: path.resolve("dist")
-                },
-                {
                     from: path.resolve("src/components/ApprovalDisplayListVisualizer.js"),
                     to: path.resolve("dist")
                 },
@@ -93,7 +85,11 @@ module.exports = {
                     to: path.resolve("dist")
                 },
                 {
-                    from: path.resolve("src/modules/ecommerce_datalayer_validator.js"),
+                    from: path.resolve("src/modules/datalayer_validator.js"),
+                    to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/components/ApprovalDisplayTreeViewCollapse.js"),
                     to: path.resolve("dist")
                 }
             ]
