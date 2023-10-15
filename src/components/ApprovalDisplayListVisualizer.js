@@ -1,23 +1,45 @@
 import React, {Fragment, useState, useEffect} from "react"
 import ApprovalDisplayCollapse from "./ApprovalDisplayCollapse";
 
-const ApprovalDisplayListVisualizer = (props)=>{
-    const [data,setData] = useState(props.analysis || []);
+import ApprovalDisplayTreeView from "./ApprovalDisplayTreeView";
 
+const ApprovalDisplayListVisualizer = ({analysis=[],})=>{
+    const [data,setData] = useState(analysis || []);
+    
     useEffect(()=>{
-        setData(props.analysis || []);
-        // console.log("data",data);
+        setData(analysis || []);
     });
+
+    const getNewCollapseID = (id) => {
+        return "collapse_"+id;
+    }
+
+    function GetElementsExeptEventName(data){
+        var array = [];
+        for (var chave in data) {
+            if(chave === "event") continue;
+            array.push({  [chave]: data[chave]});
+        }
+        return array;
+    }
 
     return(
         <Fragment>
             {data && (
                 data.map((item,index)=>
+
+                    // Collapse do nome do evento
                     <ApprovalDisplayCollapse 
                     data={item}
-                    collapseId={"collapse_"+index}
-                    key={"key"+index}>
-                    </ApprovalDisplayCollapse>                    
+                    collapseId={getNewCollapseID(index)}>
+
+                        {/* Exibe o conteúdo referente ao evento */}
+                        <ApprovalDisplayTreeView 
+                        data={GetElementsExeptEventName(item)} 
+                        collapseID={getNewCollapseID(index)}/>
+
+                    </ApprovalDisplayCollapse>   
+
                 )
             )}
         </Fragment>

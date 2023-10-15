@@ -88,12 +88,14 @@
 */
 // Os códigos abaixo são pertencentes aplicação "Ecommerce Datalayer Tool"...
 var dataLayer = [];
+var infoDataLayer = [];
 
 // Recebe os dados enviados do script observer_datalayer_changes injetado no site.
 chrome.runtime.onMessageExternal.addListener(async (message, sender, sendResponse) => {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         if(tabs.length <= 0) return; // não execute caso não tenham abas abertas
 
+        /*
         // Verifica se o id da aba aberta é o mesmo da aba que enviou os dados.
         if(message.dataLayer && sender.tab.id === tabs[0].id){
             var t_dataLayer = message.dataLayer;
@@ -103,6 +105,33 @@ chrome.runtime.onMessageExternal.addListener(async (message, sender, sendRespons
                 // Evento usado para que a página da extensão atualize os dados caso alguma alteração tenha ocorrido na camada de dados
                 chrome.runtime.sendMessage({ action: 'update_datalayer' , data: t_dataLayer});
             }
+        }*/
+
+        if(message.mostRecentEvents){
+            var mostRecentEvents = message.mostRecentEvents
+
+            mostRecentEvents.forEach(item => {
+                dataLayer.push(item);
+            });
+            // console.log("dataLayer",dataLayer);
+
+            /*
+            if(message.pageUrl){
+                var pageUrl = message.pageUrl;
+                infoDataLayer.push({
+                    events: mostRecentEvents,
+                    pageUrl: pageUrl
+                });             
+            }*/
+
+            // Evento usado para que a página da extensão atualize os dados caso alguma alteração tenha ocorrido na camada de dados
+            chrome.runtime.sendMessage({ action: 'update_datalayer' , data: dataLayer});
+
+        }
+
+        if(message.paginaRecarregada){
+            dataLayer = [];
+            chrome.runtime.sendMessage({ action: 'update_datalayer' , data: dataLayer});
         }
     });
 });
@@ -113,5 +142,3 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse(dataLayer);
     }
 });
-
-

@@ -89,9 +89,29 @@ module.exports = {
                     to: path.resolve("dist")
                 },
                 {
-                    from: path.resolve("src/components/ApprovalDisplayTreeViewCollapse.js"),
+                    from: path.resolve("src/components/CollapseElement.js"),
                     to: path.resolve("dist")
-                }
+                },
+                {
+                    from: path.resolve("src/components/ScrollableContainer.js"),
+                    to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/components/MenuHeader.js"),
+                    to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/components/MenuFooter.js"),
+                    to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/components/MenuNavigation.js"),
+                    to: path.resolve("dist")
+                },
+                {
+                    from: path.resolve("src/screens/DatalayerValidatorScreen.js"),
+                    to: path.resolve("dist")
+                },
             ]
         }),
         new HtmlPlugin({

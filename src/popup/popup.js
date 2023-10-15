@@ -1,70 +1,88 @@
-import React, { useEffect, useState } from "react";
+import React, 
+{ 
+    Fragment, 
+    // useEffect, 
+    useState 
+} from "react";
+
 import { createRoot } from "react-dom/client";
 
+// Node modules
 import "../assets/tailwind.css";
 import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
 
-// Scripts para realizar a homologação da camada de dados.
-import ApprovalDisplayListVisualizer from "../components/ApprovalDisplayListVisualizer";// Componente usado para criar a lista de eventos analizados para que o usuário possa ver.
-import GA4EcommerceEventValidator from "../modules/datalayer_validator";
+// Menus
+import MenuHeader from "../components/MenuHeader";
+import MenuNavigation from "../components/MenuNavigation";
+
+// Controla a barra de scroll
+import ScrollableContainer from "../components/ScrollableContainer";
+
+// screns/telas
+import DatalayerValidatorScreen from "../screens/DatalayerValidatorScreen";
 
 function App () {
-    const [dataLayer, setDataLayer] = useState([]);
-    const [analysis,setAnalysis] = useState([]);
+    const [stateMenu,setStateMenu] = useState(0);
 
-    const validator = new GA4EcommerceEventValidator();
-
-    // Função usada para atualizar a camada de dados 
-    function UpdateDataLayer(data){
-        if (data && data !== dataLayer && data.length !== dataLayer.length) {
-            setDataLayer(data || []);
+    const showScreen = () =>{
+        var currentScreen = (<DatalayerValidatorScreen/>);
+        switch (stateMenu) {
+            case 0:
+                currentScreen = (<DatalayerValidatorScreen/>);
+                break;
+            case 1:
+                currentScreen = (<div>Teste</div>);
+            break;
+            default:
+                break;
         }
+        return currentScreen; 
     }
 
-    // Requisita uma atualização da camada de dados quando o usuário clica no icone da extensão.
-    chrome.runtime.sendMessage({ action: 'get_datalayer' }, function(response){
-        UpdateDataLayer(response);
-    });
+    const buttonsView = (index="id_teste") =>{
+        var buttonElements = (
+            <Fragment>
+                <button
+                className="bg-transparent p-3 rounded-full text-gray-400 text-[1.25rem] active:text-gray-300 focus:text-gray-400"
+                // className="mr-1.5 inline-block p-2 bg-gray-400 text-white rounded-tr-lg rounded-br-lg opacity-75 hover:bg-gray-500 active:bg-gray-500 transition duration-300"
+                type="button"
+                data-te-offcanvas-toggle
+                data-te-target={`#${index}`}
+                aria-controls={index}
+                // data-te-ripple-init
+                // data-te-ripple-color="light"
+                >
+                    <i className="fa-solid fa-wrench"></i>
+                </button>
+            </Fragment>
+        );
 
-    // Atualiza a camada de dados quando há uma atualização na camada de dados do site monitorado.
-    chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-        if (request.action === 'update_datalayer') {
-            UpdateDataLayer(request.data);
-        }
-    });
 
-    // Executa toda vez que o valor do dataLayer for atualizado. 
-    useEffect(()=>{
-        // Analiza a camada de dados quando há uma atualização nela, retorna o resultado da analise.
-        // var analise = compararDatalayerComObjeto(dataLayer,ecommerce_events_ga4);
-        
-        var teste = validator.validateDataLayer(dataLayer);
-        // console.log("teste",teste)
+        return buttonElements;
+    }
 
-        setAnalysis(teste || []);
-    },[dataLayer]);
-    
     return (
-        <div className="w-[500px] max-h-[700px] min-h-[auto] rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900 shadow-xl shadow-black/5 ring-1 ring-slate-700/10">
-            <div className="flex flex-col p-4 pb-0">
-                <div className="flex-auto">
-                    <div className="font-medium text-[1.25rem] "> <i className="fa-solid fa-cart-shopping"></i> Ecommerce Datalayer Tool</div>
-                    {dataLayer ? (
-                        <div className="mt-1 text-slate-500">Eventos do comércio eletrônico encontrados: <span className="font-medium">{analysis.length+"/"+dataLayer.length}.</span> </div>
-                    ) : (
-                        <div className="mt-1 text-slate-500 pb-5">There is no Events in this page refresh the page{`:/`}</div>
-                    )}
-                </div>
-                <>
-                    <div className="flex-auto py-2.5">    
-                        <ApprovalDisplayListVisualizer analysis={analysis}/>
-                    </div>
-                </>
-            </div>
-        </div>
-    )
-}
+        <Fragment>
+            <div className="w-[500px] p-2 rounded-lg bg-white text-[0.8125rem] leading-5 text-slate-900 shadow-xl shadow-black/5 ring-slate-700/10">                
+                <MenuHeader>
+                    {buttonsView("id_menu_tools")}
+                </MenuHeader>
+                
+                <ScrollableContainer>
+                    {showScreen()}
+                </ScrollableContainer>
 
+                <MenuNavigation 
+                title={`FERRAMENTAS`}
+                index="id_menu_tools" 
+                activeFloatingButton={false}
+                >
+                    ---
+                </MenuNavigation>
+            </div>           
+        </Fragment>
+    );
+}
 const root = document.getElementById("root");
 
-createRoot(root).render(<App />);
+createRoot(root).render(<App/>);

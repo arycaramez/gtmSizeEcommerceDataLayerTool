@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from "react";
 import { Collapse, initTE, Ripple} from "tw-elements"; 
 
-import ApprovalDisplayTreeViewCollapse from "./ApprovalDisplayTreeViewCollapse";
+import ApprovalDisplayTreeViewCollapse from "./CollapseElement";
 
 const ApprovalDisplayTreeView = (props) => {
     const [data, setData] = useState(props.data || [])
@@ -10,12 +10,9 @@ const ApprovalDisplayTreeView = (props) => {
     var checkShowListID = false;
 
     const iconList = {
-        openIcon:'fa-solid fa-chevron-left mr-2',
-        closedIcon: 'fa-solid fa-chevron-right mr-2',
         errorIcon:'fa-solid fa-circle-xmark mr-1',
         warningIcon:'fa-solid fa-circle-exclamation mr-1',
         successIcon:'fa-solid fa-circle-check mr-1',
-        emptyIcon: 'far fa-square mr-1',
     }
 
     useEffect(()=>{
@@ -40,27 +37,27 @@ const ApprovalDisplayTreeView = (props) => {
 
         if (item.status === "success") {
             message = (
-            <li className="text-green-700">
+            <div className="text-green-700">
                 <i className={icon}></i>
                 <span dangerouslySetInnerHTML={{ __html: item.log }} />
-            </li>
+            </div>
             );
         } else if (item.status === "error") {
             message = (
-            <li className="text-red-700">
+            <div className="text-red-700">
                 <i className={icon}></i>
                 <span dangerouslySetInnerHTML={{ __html: item.log }} />
-            </li>
+            </div>
             );
         } else if (item.status === "warning") {
             message = (
-            <li className="text-yellow-700">
+            <div className="text-yellow-700">
                 <i className={icon}></i>
                 <span dangerouslySetInnerHTML={{ __html: item.log }} />
-            </li>
+            </div>
             );
         } else if(item.status === "none" || item.status === "text"){
-            message = (<li> <span dangerouslySetInnerHTML={{ __html: item.log }}/> </li>);
+            message = (<div> <span dangerouslySetInnerHTML={{ __html: item.log }}/> </div>);
         }
 
         return (<> {message}</>);
@@ -69,7 +66,7 @@ const ApprovalDisplayTreeView = (props) => {
     const rendererExibitionLogic = (item,key,array,collapseID) =>{
         var message = <></>;
         const id_element = `co_${key}_${collapseID}`;
-        var itHasNoLogs = item[key].hasOwnProperty("logs") && Object.keys(item[key].logs).length <= 0; 
+        // var itHasNoLogs = item[key].hasOwnProperty("logs") && Object.keys(item[key].logs).length <= 0; 
         var keyIsNaN = isNaN((parseInt(key)));
         
         if(item[key].hasOwnProperty("show_list_id")){
@@ -84,12 +81,13 @@ const ApprovalDisplayTreeView = (props) => {
                     <ApprovalDisplayTreeViewCollapse
                     id_element={id_element}
                     title={key}
+                    initCollapsed={!isNaN(key) && key !== '0'? true : false}
                     >
-                        <>{renderizarItem(item[key],id_element,key)}</>
+                        <>{renderizarItem(item[key],id_element)}</>
                     </ApprovalDisplayTreeViewCollapse>
                 );
             }else{
-                message = ( <> {renderizarItem(item[key],id_element,key)} </> );
+                message = ( <> {renderizarItem(item[key],id_element)} </> );
             }
         }
 

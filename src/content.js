@@ -18,3 +18,5 @@ s.setAttribute("extension_id",`${chrome.runtime.id}`)
 s.onload = function() { this.remove(); };
 // see also "Dynamic values in the injected code" section in this answer
 (document.head || document.documentElement).appendChild(s);
+
+
