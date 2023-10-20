@@ -66,7 +66,6 @@ const ApprovalDisplayTreeView = (props) => {
     const rendererExibitionLogic = (item,key,array,collapseID) =>{
         var message = <></>;
         const id_element = `co_${key}_${collapseID}`;
-        // var itHasNoLogs = item[key].hasOwnProperty("logs") && Object.keys(item[key].logs).length <= 0; 
         var keyIsNaN = isNaN((parseInt(key)));
         
         if(item[key].hasOwnProperty("show_list_id")){

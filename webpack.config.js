@@ -97,7 +97,7 @@ module.exports = {
                     to: path.resolve("dist")
                 },
                 {
-                    from: path.resolve("src/components/MenuHeader.js"),
+                    from: path.resolve("src/components/MenuSettings.js"),
                     to: path.resolve("dist")
                 },
                 {

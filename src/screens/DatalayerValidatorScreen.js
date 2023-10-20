@@ -46,30 +46,38 @@ function DatalayerValidatorScreen () {
     // Executa toda vez que o valor do dataLayer for atualizado. 
     useEffect(()=>{        
         var dl = validator.validateDataLayer(dataLayer);
-        setAnalysis(dl || []);
+        if(dl) setAnalysis(dl);
     },[dataLayer]);
 
     return (
         <Fragment>
             <div>
+                <h3 className=" text-[12px] font-bold">
+                    DataLayer Analyzer:
+                </h3>
+                <div className=" text-slate-500 pt-1 pb-1">
                 {dataLayer && dataLayer.length > 0 ? (
-                    <div className="mb-1 text-slate-500">
+                    <>
                         Eventos do comércio eletrônico encontrados:
                         <span className="font-medium">{` ${
                             analysis.length < 10 ? "0" + analysis.length : analysis.length
                         }/${dataLayer.length}.`}</span>
-                    </div>
+                    </>
                 ) : (
-                    <div className="text-slate-500 pb-5">
-                        Não foram detectados eventos nesta página, recarregue-a novamente {`:/`}
-                    </div>
+                    <>
+                    Não foram detectados eventos nesta página, recarregue-a novamente <span className="font-medium">{`:/`}</span>
+                    </>
                 )}   
+                </div>
 
-                <div className="py-2.5 h-auto" id="contentContainer">
+                <div className=" h-auto" id="contentContainer">
                     <ApprovalDisplayListVisualizer analysis={analysis}/>
                 </div>
                 
-                <MenuFooter title={`OPÇÕES:`}>
+                <MenuFooter 
+                title={`OPÇÕES:`}
+                index="id_menu_footer"
+                >
                     ...
                 </MenuFooter>
             </div>

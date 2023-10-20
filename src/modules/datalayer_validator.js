@@ -546,7 +546,6 @@ class GA4EcommerceEventValidator {
     validateDataLayer(dataLayer){
         var dataLayerValidation = [];
         for(const eventData of dataLayer){
-            //console.log("eventData",eventData)
             var response = this.validateEcommerceEvent(eventData);
             if(response !== null){
                 dataLayerValidation.push(response);

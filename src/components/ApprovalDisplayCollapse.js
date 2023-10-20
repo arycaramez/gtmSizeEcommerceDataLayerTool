@@ -1,10 +1,6 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {Collapse,Ripple,initTE} from 'tw-elements';// Recursos extra para o módulo tailwind.
 
-
-// import ApprovalDisplayTreeView from "./ApprovalDisplayTreeView";
-
-
 const ApprovalDisplayCollapse = ({data=[], collapseId="collapse_id_0",children=null}) =>{    
     const [ dataTemp, setDataTemp ] = useState(data || []);
     const [collapseIdTemp,setCollapseIdTemp] = useState(collapseId || []);
