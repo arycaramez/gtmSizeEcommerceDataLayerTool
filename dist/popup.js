@@ -1180,54 +1180,7 @@ var GA4EcommerceEventValidator = /*#__PURE__*/function () {
       if (!item) {
         return groupItems;
       }
-      var id_group = index;
-      var info = null;
-      for (var field in item) {
-        var param = field;
-        if (this.itemValidationRules[field]) {
-          var rule = this.itemValidationRules[field];
-          var value = item[field];
-          if (rule.required && (value === undefined || value === "undefined" || value === null || value === "null")) {
-            info = {
-              log: "Par\xE2metro obrigat\xF3rio <strong>".concat(field, "</strong> recebe um valor indefinido ou nulo."),
-              status: 'error'
-            };
-            continue;
-          }
-          if (value !== undefined) {
-            if (rule.type && _typeof(value) !== rule.type) {
-              info = {
-                log: "Par\xE2metro <strong>".concat(field, "</strong> deve ser do tipo <strong>").concat(rule.type, "</strong>."),
-                status: 'error'
-              };
-              continue;
-            }
-            if (rule.maxLength && value.toString().length > rule.maxLength) {
-              info = {
-                log: "Par\xE2metro <strong>".concat(field, "</strong> excede o limite de caracteres."),
-                status: 'error'
-              };
-              continue;
-            }
-            if (typeof value === 'string' && rule.type === 'string' && String(value).trim() === '') {
-              info = {
-                log: "Par\xE2metro <strong>".concat(field, "</strong> est\xE1 recebendo um texto vazio."),
-                status: 'error'
-              };
-              continue;
-            }
-          }
-          info = {
-            log: "Par\xE2metro <strong>".concat(field, "</strong> implementado com sucesso!"),
-            status: 'success'
-          };
-        } else {
-          info = {
-            log: "Par\xE2metro <strong>".concat(field, "</strong> n\xE3o esperado neste contexto."),
-            status: 'error'
-          };
-        }
-        // Aplica o resultado da validação
+      function applyGroupItems(groupItems, info, id_group, param) {
         if (info) {
           if (!groupItems[id_group]) {
             groupItems[id_group] = _defineProperty({}, param, info);
@@ -1237,6 +1190,61 @@ var GA4EcommerceEventValidator = /*#__PURE__*/function () {
         } else {
           console.error("Erro: O par\xE2metro ".concat(param, " em items, nenhuma informa\xE7\xE3o de valida\xE7\xE3o foi gerada!"));
         }
+        return groupItems;
+      }
+      var id_group = index;
+      var info = null;
+      for (var field in item) {
+        var param = field;
+        if (this.itemValidationRules[field]) {
+          var rule = this.itemValidationRules[field];
+          var value = item[field];
+          if (value !== undefined) {
+            // validar se value recebe uma string vazia
+            if (typeof value === "string" && !value.trim()) {
+              info = {
+                log: "Par\xE2metro <strong>".concat(field, "</strong> recebe como valor um texto vazio."),
+                status: 'error'
+              };
+              groupItems = applyGroupItems(groupItems, info, id_group, param);
+              continue;
+            }
+            if (rule.type && _typeof(value) !== rule.type) {
+              info = {
+                log: "Par\xE2metro <strong>".concat(field, "</strong> deve ser do tipo <strong>").concat(rule.type, "</strong>."),
+                status: 'error'
+              };
+              groupItems = applyGroupItems(groupItems, info, id_group, param);
+              continue;
+            }
+            if (rule.maxLength && value.toString().length > rule.maxLength) {
+              info = {
+                log: "Par\xE2metro <strong>".concat(field, "</strong> excede o limite de caracteres."),
+                status: 'error'
+              };
+              groupItems = applyGroupItems(groupItems, info, id_group, param);
+              continue;
+            }
+            if (typeof value === 'string' && rule.type === 'string' && String(value).trim() === '') {
+              info = {
+                log: "Par\xE2metro <strong>".concat(field, "</strong> est\xE1 recebendo um texto vazio."),
+                status: 'error'
+              };
+              groupItems = applyGroupItems(groupItems, info, id_group, param);
+              continue;
+            }
+            info = {
+              log: "Par\xE2metro <strong>".concat(field, "</strong> implementado com sucesso!"),
+              status: 'success'
+            };
+          }
+        } else {
+          info = {
+            log: "Par\xE2metro <strong>".concat(field, "</strong> n\xE3o esperado neste contexto."),
+            status: 'error'
+          };
+        }
+        groupItems = applyGroupItems(groupItems, info, id_group, param);
       }
       return groupItems;
     }
