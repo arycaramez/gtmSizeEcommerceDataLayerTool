@@ -497,15 +497,25 @@ class GA4EcommerceEventValidator {
                 const rule = this.itemValidationRules[field];
                 const value = item[field];
                 
-                if (value !== undefined) {
+                if (value !== undefined && value !== null) {
                     // validar se value recebe uma string vazia
-                    if (typeof value === "string" && !value.trim()) {
-                        info = {                        
-                            log: `Parâmetro <strong>${field}</strong> recebe como valor um texto vazio.`,
-                            status: 'error',
+                    if (typeof value === "string") {
+                        if(!value.trim()){
+                            info = {                        
+                                log: `Parâmetro <strong>${field}</strong> recebe como valor um texto vazio.`,
+                                status: 'error',
+                            }
+                            groupItems = applyGroupItems(groupItems,info,id_group,param);
+                            continue;
                         }
-                        groupItems = applyGroupItems(groupItems,info,id_group,param)
-                        continue;
+                        if(value === "undefined" || value === "null") {
+                            info = {                        
+                                log: `Parâmetro <strong>${field}</strong> recebe como valor o texto "${value}".`,
+                                status: 'error',
+                            }
+                            groupItems = applyGroupItems(groupItems,info,id_group,param);
+                            continue;
+                        }
                     }
 
                     if (rule.type && typeof value !== rule.type) {
@@ -513,7 +523,7 @@ class GA4EcommerceEventValidator {
                             log: `Parâmetro <strong>${field}</strong> deve ser do tipo <strong>${rule.type}</strong>.`,
                             status: 'error',
                         }
-                        groupItems = applyGroupItems(groupItems,info,id_group,param)
+                        groupItems = applyGroupItems(groupItems,info,id_group,param);
                         continue;
                     }
 
@@ -522,7 +532,7 @@ class GA4EcommerceEventValidator {
                             log: `Parâmetro <strong>${field}</strong> excede o limite de caracteres.`,
                             status: 'error',
                         }
-                        groupItems = applyGroupItems(groupItems,info,id_group,param)
+                        groupItems = applyGroupItems(groupItems,info,id_group,param);
                         continue;
                     }
 
@@ -531,7 +541,7 @@ class GA4EcommerceEventValidator {
                             log: `Parâmetro <strong>${field}</strong> está recebendo um texto vazio.`,
                             status: 'error',
                         };
-                        groupItems = applyGroupItems(groupItems,info,id_group,param)
+                        groupItems = applyGroupItems(groupItems,info,id_group,param);
                         continue;
                     }
                     
@@ -546,7 +556,7 @@ class GA4EcommerceEventValidator {
                     status: 'error',
                 }
             }
-            groupItems = applyGroupItems(groupItems,info,id_group,param)
+            groupItems = applyGroupItems(groupItems,info,id_group,param);
         }
 
         return groupItems;

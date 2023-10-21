@@ -328,64 +328,60 @@ var ApprovalDisplayTreeViewCollapse = function ApprovalDisplayTreeViewCollapse(_
     _useState2 = _slicedToArray(_useState, 2),
     collapseState = _useState2[0],
     setCollapseState = _useState2[1];
-
-  // Manter função abaixo
-  var getCollapse = function getCollapse(value) {
-    var defaultState = {
-      open: "!visible",
-      closed: "!visible hidden"
-    };
-    return !value ? defaultState.open : defaultState.closed;
-  };
+  var collapseArea = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var iconList = {
     openIcon: 'fa-solid fa-chevron-left mr-2',
     closedIcon: 'fa-solid fa-chevron-right mr-2'
     // emptyIcon: 'far fa-square mr-1',
   };
 
-  var getIcon = function getIcon(value) {
-    return value ? iconList.openIcon : iconList.closedIcon;
-  };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     (0,tw_elements__WEBPACK_IMPORTED_MODULE_1__.initTE)({
       Collapse: tw_elements__WEBPACK_IMPORTED_MODULE_1__.Collapse,
       Ripple: tw_elements__WEBPACK_IMPORTED_MODULE_1__.Ripple
     });
-  });
+    if (collapseArea) {
+      if (initCollapsed) {
+        // minimizado
+        if (!collapseArea.current.classList.contains("hidden")) {
+          collapseArea.current.classList.add("hidden");
+        }
+      } else {
+        // maximizado
+        collapseArea.current.setAttribute("data-te-collapse-show", true);
+        if (collapseArea.current.classList.contains("hidden")) {
+          collapseArea.current.classList.remove("hidden");
+        }
+      }
+    }
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setCollapseState(initCollapsed);
+  }, [initCollapsed]);
   var interact = function interact(event) {
     setCollapseState(!collapseState);
-    changeIcon(event);
     return false;
   };
-
-  // Função usada para alterar o icone da lista colapsada
-  var changeIcon = function changeIcon(event) {
-    // Acessa o elemento que acionou o clique
-    var clickedElement = event.target;
-
-    // usado para selecionar o elemento do icone
-    var iconElement = clickedElement.closest('a').querySelector('i');
-    // insere um icone com base no icone usado atualmente
-    if (iconElement) {
-      iconElement.className = !collapseState ? iconList.openIcon : iconList.closedIcon;
-    }
-  };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
-    "data-te-collapse-init": true,
+    "data-te-collapse-init": collapseState,
     href: "#".concat(id_element),
-    "aria-expanded": collapseState,
+    "aria-expanded": !collapseState,
     "aria-controls": id_element,
     "data-te-ripple-init": true,
     "data-te-ripple-color": "light",
     role: "button",
     onClick: interact
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
-    className: getIcon(collapseState)
+  }, collapseState ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
+    className: iconList.closedIcon
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
+    className: iconList.openIcon
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, title))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    "data-te-collapse-item": true,
-    "data-te-collapse-show": !initCollapsed,
+    "data-te-collapse-item": true
+    // data-te-collapse-show
+    ,
     id: id_element,
-    className: "multi-collapse ml-4 mt-1 mb-1 ".concat(getCollapse(initCollapsed))
+    className: "multi-collapse ml-4 mt-1 mb-1 !visible hidden",
+    ref: collapseArea
   }, children)));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ApprovalDisplayTreeViewCollapse);
@@ -1199,15 +1195,25 @@ var GA4EcommerceEventValidator = /*#__PURE__*/function () {
         if (this.itemValidationRules[field]) {
           var rule = this.itemValidationRules[field];
           var value = item[field];
-          if (value !== undefined) {
+          if (value !== undefined && value !== null) {
             // validar se value recebe uma string vazia
-            if (typeof value === "string" && !value.trim()) {
-              info = {
-                log: "Par\xE2metro <strong>".concat(field, "</strong> recebe como valor um texto vazio."),
-                status: 'error'
-              };
-              groupItems = applyGroupItems(groupItems, info, id_group, param);
-              continue;
+            if (typeof value === "string") {
+              if (!value.trim()) {
+                info = {
+                  log: "Par\xE2metro <strong>".concat(field, "</strong> recebe como valor um texto vazio."),
+                  status: 'error'
+                };
+                groupItems = applyGroupItems(groupItems, info, id_group, param);
+                continue;
+              }
+              if (value === "undefined" || value === "null") {
+                info = {
+                  log: "Par\xE2metro <strong>".concat(field, "</strong> recebe como valor o texto \"").concat(value, "\"."),
+                  status: 'error'
+                };
+                groupItems = applyGroupItems(groupItems, info, id_group, param);
+                continue;
+              }
             }
             if (rule.type && _typeof(value) !== rule.type) {
               info = {
