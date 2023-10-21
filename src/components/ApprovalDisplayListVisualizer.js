@@ -23,6 +23,8 @@ const ApprovalDisplayListVisualizer = ({analysis=[],})=>{
         return array;
     }
 
+    console.log("data", data);
+
     return(
         <Fragment>
             {data && (
@@ -32,6 +34,18 @@ const ApprovalDisplayListVisualizer = ({analysis=[],})=>{
                     <ApprovalDisplayCollapse 
                     data={item}
                     collapseId={getNewCollapseID(index)}>
+
+                        {item.metadata && ( 
+                            <p className="ml-4 mr-4 mt-2 ">
+                                <strong>{`Página: `}</strong>
+                                <a 
+                                className="text-primary transition duration-150 ease-in-out hover:text-primary-500 focus:text-primary-500 active:text-primary"
+                                href={item.metadata.pageUrl}
+                                >
+                                    {item.metadata.pageUrl}
+                                </a>
+                            </p>
+                        )}
 
                         {/* Exibe o conteúdo referente ao evento */}
                         <ApprovalDisplayTreeView 

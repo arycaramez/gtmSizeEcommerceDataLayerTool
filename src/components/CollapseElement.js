@@ -16,11 +16,13 @@ const ApprovalDisplayTreeViewCollapse = ({initCollapsed=false,id_element="id",ti
         initTE({ Collapse, Ripple });
 
         if(collapseArea){
-            if(initCollapsed){// minimizado
+            // minimizado
+            if(initCollapsed){
                 if(!collapseArea.current.classList.contains("hidden")){
                     collapseArea.current.classList.add("hidden");
                 }
-            }else{// maximizado
+            }else{
+                // maximizado
                 collapseArea.current.setAttribute("data-te-collapse-show",true)
                 if(collapseArea.current.classList.contains("hidden")){
                     collapseArea.current.classList.remove("hidden");

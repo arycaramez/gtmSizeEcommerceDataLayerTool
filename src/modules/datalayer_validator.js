@@ -297,6 +297,7 @@ class GA4EcommerceEventValidator {
                     show_list_id:true, 
                 },
             },
+            metadata: eventData.metadata? JSON.parse(JSON.stringify(eventData.metadata)) : {},
         }
 
         // Usado para validar os parâmetros obrigatórios presentes no parâmetro ecommerce
@@ -315,6 +316,7 @@ class GA4EcommerceEventValidator {
         }
         // Usado para validar se no parâmetro ecommerce existem itens faltando.
         for (const field in ecommerceData) {
+            if(field === "metadata") continue;
             // console.log("valor",ecommerceData[field])
             
             if(ecommerceData[field] === undefined || ecommerceData[field] === "undefined"){

@@ -45,8 +45,8 @@ function DatalayerValidatorScreen () {
 
     // Executa toda vez que o valor do dataLayer for atualizado. 
     useEffect(()=>{        
-        var dl = validator.validateDataLayer(dataLayer);
-        if(dl) setAnalysis(dl);
+        var newAnalysis = validator.validateDataLayer(dataLayer);
+        if(newAnalysis) setAnalysis(newAnalysis);
     },[dataLayer]);
 
     return (
@@ -65,7 +65,7 @@ function DatalayerValidatorScreen () {
                     </>
                 ) : (
                     <>
-                    Não foram detectados eventos nesta página, recarregue-a novamente <span className="font-medium">{`:/`}</span>
+                        <p>Não foram detectados eventos nesta página, recarregue-a novamente <span className="font-medium">{`:/`}</span></p>
                     </>
                 )}   
                 </div>

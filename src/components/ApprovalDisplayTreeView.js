@@ -68,6 +68,8 @@ const ApprovalDisplayTreeView = (props) => {
         const id_element = `co_${key}_${collapseID}`;
         var keyIsNaN = isNaN((parseInt(key)));
         
+        if(key === "metadata") return;
+
         if(item[key].hasOwnProperty("show_list_id")){
             checkShowListID = item[key].show_list_id;
         }

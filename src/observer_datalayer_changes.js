@@ -24,6 +24,9 @@ function observeDataLayerChanges() {
 
     // Atualiza o conjunto de eventos enviados
     notSendedEvents.forEach(evento => {
+      evento.metadata = evento.metadata || {};
+      evento.metadata.pageUrl = window.location.href;
+
       eventosEnviados.add(evento)
     });
 
