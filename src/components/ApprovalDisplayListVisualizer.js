@@ -33,10 +33,10 @@ const ApprovalDisplayListVisualizer = ({analysis=[],})=>{
         setPageNumber(selected)
     }
     const paginationStyle = {
-        container:"flex justify-center max-w-screen-xl mx-auto",
-        breakLink:"relative block rounded bg-transparent px-3 py-1.5 text-sm text-black",
-        stylePageNumberActive:"font-bold relative block rounded bg-transparent px-3 py-1.5 text-sm text-primary transition-all duration-300 hover:bg-neutral-100 dark:text-primary dark:hover:bg-neutral-300 dark:hover:text-black/70",
-        stylePageNumber:"relative block rounded bg-transparent px-3 py-1.5 text-sm text-black transition-all duration-300 hover:bg-neutral-100 dark:text-black/70 dark:hover:bg-neutral-300 dark:hover:text-black/70"
+        container:"select-none flex justify-center max-w-screen-xl mx-auto",
+        breakLink:"select-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-black",
+        stylePageNumberActive:"select-none font-bold relative block rounded bg-transparent px-3 py-1.5 text-sm text-primary transition-all duration-300 hover:bg-neutral-100 dark:text-primary dark:hover:bg-neutral-300 dark:hover:text-black/70",
+        stylePageNumber:"select-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-black transition-all duration-300 hover:bg-neutral-100 dark:text-black/70 dark:hover:bg-neutral-300 dark:hover:text-black/70"
     }
     //
 
