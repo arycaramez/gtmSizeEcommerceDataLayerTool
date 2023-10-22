@@ -109,7 +109,7 @@ const ApprovalDisplayTreeView = (props) => {
 
     return (
         <Fragment>
-            <ul className="pb-2 pt-2 ml-4 mt-1 mb-1">
+            <ul className="pb-2 pt-2 ml-4 mt-1 mb-1 ">
                 {data.map((key, array) => (
                     <>
                         {renderizarItem(key,props.collapseID+"_start")}

@@ -20,7 +20,6 @@ const MenuFooter = ({ title,children, index="offcanvasBottom"}) => {
                     data-te-ripple-init
                     data-te-ripple-color="light"
                 >
-                    OPÇÕES
                     <span className='mr-1 ml-1'>
                         <i className="fa-solid fa-angles-up"></i>
                     </span>

@@ -70,7 +70,7 @@ function DatalayerValidatorScreen () {
                 )}   
                 </div>
 
-                <div className=" h-auto" id="contentContainer">
+                <div className="h-auto mb-[40px]" id="contentContainer">
                     <ApprovalDisplayListVisualizer analysis={analysis}/>
                 </div>
                 

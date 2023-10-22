@@ -1,14 +1,16 @@
 import React, {Fragment, useState, useEffect} from "react"
-import ApprovalDisplayCollapse from "./ApprovalDisplayCollapse";
 
+import ApprovalDisplayCollapse from "./ApprovalDisplayCollapse";
 import ApprovalDisplayTreeView from "./ApprovalDisplayTreeView";
+import ReactPaginate from "react-paginate";
 
 const ApprovalDisplayListVisualizer = ({analysis=[],})=>{
     const [data,setData] = useState(analysis || []);
-    
+    const [pageNumber,setPageNumber] = useState(0);
+
     useEffect(()=>{
-        setData(analysis || []);
-    });
+        setData(analysis);
+    },[analysis]);
 
     const getNewCollapseID = (id) => {
         return "collapse_"+id;
@@ -23,18 +25,32 @@ const ApprovalDisplayListVisualizer = ({analysis=[],})=>{
         return array;
     }
 
-    console.log("data", data);
+    // pagination
+    const itemsPerPage = 10;
+    const pagesVisited = pageNumber * itemsPerPage;
+    const pageCount = Math.ceil(data.length/itemsPerPage);
+    const changePage = ({selected})=>{
+        setPageNumber(selected)
+    }
+    const paginationStyle = {
+        container:"flex justify-center max-w-screen-xl mx-auto",
+        breakLink:"relative block rounded bg-transparent px-3 py-1.5 text-sm text-black",
+        stylePageNumberActive:"font-bold relative block rounded bg-transparent px-3 py-1.5 text-sm text-primary transition-all duration-300 hover:bg-neutral-100 dark:text-primary dark:hover:bg-neutral-300 dark:hover:text-black/70",
+        stylePageNumber:"relative block rounded bg-transparent px-3 py-1.5 text-sm text-black transition-all duration-300 hover:bg-neutral-100 dark:text-black/70 dark:hover:bg-neutral-300 dark:hover:text-black/70"
+    }
+    //
 
     return(
-        <Fragment>
+        <Fragment>            
             {data && (
-                data.map((item,index)=>
+                data.slice(pagesVisited,pagesVisited + itemsPerPage)
+                .map((item,index)=>
 
                     // Collapse do nome do evento
                     <ApprovalDisplayCollapse 
                     data={item}
-                    collapseId={getNewCollapseID(index)}>
-
+                    collapseId={getNewCollapseID(index)}
+                    >
                         {item.metadata && ( 
                             <p className="ml-4 mr-4 mt-2 ">
                                 <strong>{`Página: `}</strong>
@@ -50,11 +66,27 @@ const ApprovalDisplayListVisualizer = ({analysis=[],})=>{
                         {/* Exibe o conteúdo referente ao evento */}
                         <ApprovalDisplayTreeView 
                         data={GetElementsExeptEventName(item)} 
-                        collapseID={getNewCollapseID(index)}/>
+                        collapseID={getNewCollapseID(index)}
+                        />
 
                     </ApprovalDisplayCollapse>   
 
                 )
+            )}
+            
+            {data.length > itemsPerPage + 1 && (
+                <ReactPaginate
+                previousLabel={'<'}
+                nextLabel={'>'}
+                pageCount={pageCount}
+                onPageChange={changePage}
+                containerClassName={paginationStyle.container}
+                previousLinkClassName={paginationStyle.stylePageNumber}
+                nextLinkClassName={paginationStyle.stylePageNumber}
+                pageLinkClassName={paginationStyle.stylePageNumber}
+                activeLinkClassName={paginationStyle.stylePageNumberActive}
+                breakLinkClassName={paginationStyle.breakLink}
+                />
             )}
         </Fragment>
     );

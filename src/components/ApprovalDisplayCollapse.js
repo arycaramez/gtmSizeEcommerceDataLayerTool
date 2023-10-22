@@ -24,7 +24,7 @@ const ApprovalDisplayCollapse = ({data=[], collapseId="collapse_id_0",children=n
 
     return(
         <Fragment>
-            <div className="py-0.5">
+            <div className={`py-0.5 `}>
                 <span className="inline-flex w-[100%]"
                 >
                     <a
