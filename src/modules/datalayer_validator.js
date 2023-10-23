@@ -282,8 +282,7 @@ class GA4EcommerceEventValidator {
         if (!this.validationRules[eventName]) return null;
 
         const { requiredFields, optionalFields, itemsFields, maxFieldLengths, valueGreaterThanZero } = this.validationRules[eventName];
-        const ecommerceData = eventData.ecommerce;
-
+        
         var validations = {
             event: eventName,
             logs:[],
@@ -300,173 +299,195 @@ class GA4EcommerceEventValidator {
             metadata: eventData.metadata? JSON.parse(JSON.stringify(eventData.metadata)) : {},
         }
 
-        // Usado para validar os parâmetros obrigatórios presentes no parâmetro ecommerce
-        if(requiredFields){
-            for (const field of requiredFields) {
-                if (!(field in ecommerceData)) {
-                    validations.ecommerce.logs.push({
-                        [field]: { 
-                            log: `Parâmetro obrigatório <strong>${field}</strong> ausente.`, 
-                            status: 'error',
-                        }
-                    });
-                    continue;
+        const ecommerceData = eventData.ecommerce;
+
+        if(!ecommerceData){
+            validations.logs.push({
+                [`ecommerce`]:{
+                    log:`Parâmetro obrigatório <strong>ecommerce</strong> ausente.`,
+                    status:`error`
                 }
-            }
-        }
-        // Usado para validar se no parâmetro ecommerce existem itens faltando.
-        for (const field in ecommerceData) {
-            if(field === "metadata") continue;
-            // console.log("valor",ecommerceData[field])
-            
-            if(ecommerceData[field] === undefined || ecommerceData[field] === "undefined"){
-                validations.ecommerce.logs.push({
-                    [field]: { 
-                        log: `Parâmetro <strong>${field}</strong> com valor não definido ou inexistente.`, 
-                        status: 'warning',
-                    }
-                });
-                continue;
-            } 
-
-            if(optionalFields && requiredFields){
-                if (![...optionalFields,...requiredFields, "items"].includes(field)) {
-                    validations.ecommerce.logs.push({
-                        [field]: { 
-                            log: `Parâmetro <strong>${field}</strong> não foi encontrado.`, 
-                            status: 'error',
-                        }
-                    });
-                    continue;
-                }
-            }
-
-            if(maxFieldLengths && ecommerceData){
-                if (maxFieldLengths[field] && ecommerceData[field].length > maxFieldLengths[field]) {
-                    validations.ecommerce.logs.push({
-                        [field]: { 
-                            log: `Parâmetro <strong>${field}</strong> excede o limite de caracteres.`, 
-                            status: 'warning',
-                        }
-                    });
-                    continue;
-                }
-            }
-
-            /*
-            if (typeof ecommerceData[field] === 'string' && String(ecommerceData[field]).trim() === '') {
-                validations.ecommerce.logs.push({
-                    [field]: { 
-                        log: `Parâmetro <strong>${field}</strong> está recebendo um texto vazio.`,
-                        status: 'error',
-                    }
-                });
-                continue;
-            }*/
-        }
-
-        
-        // Verifica se os parâmetros marcados para receber valores maiores que zero, fazem parte da lista.
-        if(valueGreaterThanZero){
-            for (const field of valueGreaterThanZero) {
-                if (typeof ecommerceData[field] === 'number' && ecommerceData[field] <= 0) {
-                    validations.ecommerce.logs.push({
-                        [field]: { 
-                            log: `Parâmetro <strong>${field}</strong> deve ser maior que zero.`,
-                            status: 'error',
-                        }
-                    });
-                }
-            }
-        }
-
-        // Verifica se existem parâmetros no evento dentro de ecommerce, 
-        // caso o parâmetro não possua um log de erro, criamos um log 
-        // informando que ele foi implementado com sucesso no evento.
-        for (const key in ecommerceData) {
-            if(key === 'items') continue;
-            // Verifica se a chave não está presente nos logs de validação
-            const isKeyValidated = validations.ecommerce.logs.some(log => log.hasOwnProperty(key));
-
-            // Se não estiver validado, adiciona à lista de chaves ausentes
-            if (!isKeyValidated) {
-                validations.ecommerce.logs.push({
-                    [key]: { 
-                        log: (requiredFields.includes(key))? 
-                        `O Campo obrigatório <strong>${key}</strong> implementado com sucesso!`:
-                        `O Campo ${key} implementado com sucesso!`,
-                        status: 'success',
-                    }
-                });
-            }
-        }
-
-        // Validação dos parâmetros de items.
-        const itemsToValidate = eventData.ecommerce.items;
-
-        if(itemsToValidate===null){
-            validations.ecommerce.logs.push({
-                items: { 
-                    log: `Parâmetro <strong>items</strong> está recebendo um valor nulo.`,
-                    status: 'error',
-                }
-            });
-        }else if(itemsToValidate===undefined || itemsToValidate === "undefined"){
-            validations.ecommerce.logs.push({
-                items: { 
-                    log: `Parâmetro <strong>items</strong> está recebendo um valor indefinido ou inexistente.`,
+            })            
+        } if(ecommerceData === undefined || ecommerceData === "undefined"){
+            validations.logs.push({
+                [`ecommerce`]: { 
+                    log: `Parâmetro <strong>ecommerce</strong> com valor não definido ou inexistente.`, 
                     status: 'error',
                 }
             });
         }else{
-            // Valida se items é de fato um array
-            if (!Array.isArray(itemsToValidate)) {
+        
+            // Usado para validar os parâmetros obrigatórios presentes no parâmetro ecommerce
+            if(requiredFields){
+                for (const field of requiredFields) {
+                    if (!(field in ecommerceData)) {
+                        validations.ecommerce.logs.push({
+                            [field]: { 
+                                log: `Parâmetro obrigatório <strong>${field}</strong> ausente.`, 
+                                status: 'error',
+                            }
+                        });
+                        continue;
+                    }
+                }
+            }
+            // Usado para validar se no parâmetro ecommerce existem itens faltando.
+            for (const field in ecommerceData) {
+                if(field === "metadata") continue;
+                // console.log("valor",ecommerceData[field])
+                
+                if(ecommerceData[field] === undefined || ecommerceData[field] === "undefined"){
+                    validations.ecommerce.logs.push({
+                        [field]: { 
+                            log: `Parâmetro <strong>${field}</strong> com valor não definido ou inexistente.`, 
+                            status: 'warning',
+                        }
+                    });
+                    continue;
+                } 
+
+                if(optionalFields && requiredFields){
+                    if (![...optionalFields,...requiredFields, "items"].includes(field)) {
+                        validations.ecommerce.logs.push({
+                            [field]: { 
+                                log: `Parâmetro <strong>${field}</strong> não foi encontrado.`, 
+                                status: 'error',
+                            }
+                        });
+                        continue;
+                    }
+                }
+
+                if(maxFieldLengths && ecommerceData){
+                    if (maxFieldLengths[field] && ecommerceData[field].length > maxFieldLengths[field]) {
+                        validations.ecommerce.logs.push({
+                            [field]: { 
+                                log: `Parâmetro <strong>${field}</strong> excede o limite de caracteres.`, 
+                                status: 'warning',
+                            }
+                        });
+                        continue;
+                    }
+                }
+
+                /*
+                if (typeof ecommerceData[field] === 'string' && String(ecommerceData[field]).trim() === '') {
+                    validations.ecommerce.logs.push({
+                        [field]: { 
+                            log: `Parâmetro <strong>${field}</strong> está recebendo um texto vazio.`,
+                            status: 'error',
+                        }
+                    });
+                    continue;
+                }*/
+
+
+            }
+
+            
+            // Verifica se os parâmetros marcados para receber valores maiores que zero, fazem parte da lista.
+            if(valueGreaterThanZero){
+                for (const field of valueGreaterThanZero) {
+                    if (typeof ecommerceData[field] === 'number' && ecommerceData[field] <= 0) {
+                        validations.ecommerce.logs.push({
+                            [field]: { 
+                                log: `Parâmetro <strong>${field}</strong> deve ser maior que zero.`,
+                                status: 'error',
+                            }
+                        });
+                    }
+                }
+            }
+
+            // Verifica se existem parâmetros no evento dentro de ecommerce, 
+            // caso o parâmetro não possua um log de erro, criamos um log 
+            // informando que ele foi implementado com sucesso no evento.
+            for (const key in ecommerceData) {
+                if(key === 'items') continue;
+                // Verifica se a chave não está presente nos logs de validação
+                const isKeyValidated = validations.ecommerce.logs.some(log => log.hasOwnProperty(key));
+
+                // Se não estiver validado, adiciona à lista de chaves ausentes
+                if (!isKeyValidated) {
+                    validations.ecommerce.logs.push({
+                        [key]: { 
+                            log: (requiredFields.includes(key))? 
+                            `O Campo obrigatório <strong>${key}</strong> implementado com sucesso!`:
+                            `O Campo ${key} implementado com sucesso!`,
+                            status: 'success',
+                        }
+                    });
+                }
+            }
+
+            // Validação dos parâmetros de items.
+            const itemsToValidate = eventData.ecommerce.items;
+
+            if(!itemsToValidate){
+                validations.ecommerce.logs.push({
+                    [`items`]:{
+                        log:`Parâmetro obrigatório <strong>items</strong> ausente.`,
+                        status:`error`
+                    }
+                })
+            }else if(itemsToValidate===undefined || itemsToValidate === "undefined"){
                 validations.ecommerce.logs.push({
                     items: { 
-                        log: `Parâmetro <strong>items</strong> deve receber uma lista de parâmetros.`,
+                        log: `Parâmetro <strong>items</strong> está recebendo um valor indefinido ou inexistente.`,
                         status: 'error',
                     }
                 });
             }else{
-                // Valida se items possui mais de um parametros
-                if(itemsToValidate.length <= 0){
+                // Valida se items é de fato um array
+                if (!Array.isArray(itemsToValidate)) {
                     validations.ecommerce.logs.push({
                         items: { 
                             log: `Parâmetro <strong>items</strong> deve receber uma lista de parâmetros.`,
                             status: 'error',
                         }
                     });
+                }else{
+                    // Valida se items possui mais de um parametros
+                    if(itemsToValidate.length <= 0){
+                        validations.ecommerce.logs.push({
+                            items: { 
+                                log: `Parâmetro <strong>items</strong> deve receber uma lista de parâmetros.`,
+                                status: 'error',
+                            }
+                        });
+                    }
+                }
+
+                // Valida se ecommerce possui parâmetros
+                // if(validations.ecommerce.logs.length <= 0){
+                //     // incluir futuramente a nota "Não foi encontrado nenhum <strong>parâmetro</strong> no evento, exceto <strong>items</strong>!"
+                //     validations.ecommerce.logs.push({                     
+                //         log: `Não foi encontrado nenhum <strong>parâmetro</strong> no evento!`,
+                //         status: 'error',                    
+                //     });
+                // }
+
+                // Validação dos parâmetros de todos os itens na lista.
+                var groupItems = {};
+                if (Array.isArray(itemsToValidate)) {
+                    for (const item of itemsToValidate) {
+                        var index = itemsToValidate.findIndex(e => e === item);
+                        groupItems = this.validateItem(item, index, groupItems);
+                    }
+                }
+                groupItems = Object.values(groupItems);
+                // Verifica se foram encontrados itens na lista
+                if(groupItems.length > 0){
+                    validations.ecommerce.items.logs = groupItems;
+                }else{
+                    validations.ecommerce.items.logs.push({                     
+                        log: `Não foi encontrado nenhum <strong>item</strong> no evento!`,
+                        status: 'error',                    
+                    });
                 }
             }
-
-            // Valida se ecommerce possui parâmetros
-            // if(validations.ecommerce.logs.length <= 0){
-            //     // incluir futuramente a nota "Não foi encontrado nenhum <strong>parâmetro</strong> no evento, exceto <strong>items</strong>!"
-            //     validations.ecommerce.logs.push({                     
-            //         log: `Não foi encontrado nenhum <strong>parâmetro</strong> no evento!`,
-            //         status: 'error',                    
-            //     });
-            // }
-
-            // Validação dos parâmetros de todos os itens na lista.
-            var groupItems = {};
-            if (Array.isArray(itemsToValidate)) {
-                for (const item of itemsToValidate) {
-                    var index = itemsToValidate.findIndex(e => e === item);
-                    groupItems = this.validateItem(item, index, groupItems);
-                }
-            }
-            groupItems = Object.values(groupItems);
-            // Verifica se foram encontrados itens na lista
-            if(groupItems.length > 0){
-                validations.ecommerce.items.logs = groupItems;
-            }else{
-                validations.ecommerce.items.logs.push({                     
-                    log: `Não foi encontrado nenhum <strong>item</strong> no evento!`,
-                    status: 'error',                    
-                });
-            }
-        }
+        }        
+        
         return validations;
     }
 

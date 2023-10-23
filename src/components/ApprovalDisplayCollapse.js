@@ -51,7 +51,7 @@ const ApprovalDisplayCollapse = ({data=[], collapseId="collapse_id_0",children=n
                     )}
                     </a>
 
-                    <button 
+                    {/* <button 
                     data-te-ripple-init
                     data-te-ripple-color="light"
                     className="float-right text-[1rem] w-auto inline-block rounded bg-primary px-2 pb-2 pt-2.5 text-xs 
@@ -65,7 +65,7 @@ const ApprovalDisplayCollapse = ({data=[], collapseId="collapse_id_0",children=n
                     dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                     >
                         <i class="fa-regular fa-copy pl-1 pr-1"></i>
-                    </button>
+                    </button> */}
                 </span>
                 <div 
                 className ="!visible hidden" 

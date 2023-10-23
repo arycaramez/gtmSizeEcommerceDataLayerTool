@@ -24,12 +24,12 @@ function DatalayerValidatorScreen () {
         }
     }
 
-    function requestUpdateDataLayer(){
-        chrome.runtime.sendMessage({ action: 'get_datalayer' }, function(response){
-            UpdateDataLayer(response);
-            console.log("get_datalayer ",response)
-        });
-    }
+    // function requestUpdateDataLayer(){
+    //     chrome.runtime.sendMessage({ action: 'get_datalayer' }, function(response){
+    //         UpdateDataLayer(response);
+    //         console.log("get_datalayer ",response)
+    //     });
+    // }
 
     // Requisita uma atualização da camada de dados quando o usuário clica no icone da extensão.
     chrome.runtime.sendMessage({ action: 'get_datalayer' }, function(response){

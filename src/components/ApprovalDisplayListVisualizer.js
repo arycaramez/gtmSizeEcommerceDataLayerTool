@@ -52,8 +52,8 @@ const ApprovalDisplayListVisualizer = ({analysis=[],})=>{
                     collapseId={getNewCollapseID(index)}
                     >
                         {item.metadata && ( 
-                            <p className="ml-4 mr-4 mt-2 ">
-                                <strong>{`Página: `}</strong>
+                            <p className="ml-4 mr-4 mt-2 text-xs">
+                                {`Página: `}
                                 <a 
                                 className="text-primary transition duration-150 ease-in-out hover:text-primary-500 focus:text-primary-500 active:text-primary"
                                 href={item.metadata.pageUrl}

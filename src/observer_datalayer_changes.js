@@ -2,7 +2,7 @@
 // os dados da camada de dados do site onde foi inserida, para a extensão Ecommerce 
 // Datalayer Tool específicamente.
 function observeDataLayerChanges() {
-  console.log("Observer Iniciado");
+  // console.log("Observer Iniciado");
 
   const scriptElement = document.currentScript;
   const extension_id = scriptElement.getAttribute('extension_id');

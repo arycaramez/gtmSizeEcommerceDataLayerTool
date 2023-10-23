@@ -3,11 +3,19 @@ import { Collapse, initTE, Ripple} from "tw-elements";
 
 import ApprovalDisplayTreeViewCollapse from "./CollapseElement";
 
-const ApprovalDisplayTreeView = (props) => {
-    const [data, setData] = useState(props.data || [])
+const ApprovalDisplayTreeView = ({data,collapseID}) => {
+    const [dataTemp, setDataTemp] = useState(data || [])
 
     // Verifica se os ID's devem ser exibidos nas listas de validação 
     var checkShowListID = false;
+
+    const ecommerceExiste = dataTemp && dataTemp.some(objeto =>
+        objeto.logs && objeto.logs.some(log => log.ecommerce)
+    );
+
+    const itemsExiste = dataTemp && dataTemp.some(objeto =>
+        objeto.ecommerce && objeto.ecommerce.logs && objeto.ecommerce.logs.some(log => log.items)
+    );
 
     const iconList = {
         errorIcon:'fa-solid fa-circle-xmark mr-1',
@@ -16,7 +24,7 @@ const ApprovalDisplayTreeView = (props) => {
     }
 
     useEffect(()=>{
-        setData(props.data || []);
+        setDataTemp(data || []);
         initTE({Collapse,Ripple});
     });
 
@@ -63,12 +71,13 @@ const ApprovalDisplayTreeView = (props) => {
         return (<> {message}</>);
     };
 
-    const rendererExibitionLogic = (item,key,array,collapseID) =>{
+    const rendererExibitionLogic = (item,key,array,collapse_id) =>{
         var message = <></>;
-        const id_element = `co_${key}_${collapseID}`;
+        const id_element = `co_${key}_${collapse_id}`;
         var keyIsNaN = isNaN((parseInt(key)));
         
         if(key === "metadata") return;
+
 
         if(item[key].hasOwnProperty("show_list_id")){
             checkShowListID = item[key].show_list_id;
@@ -77,6 +86,9 @@ const ApprovalDisplayTreeView = (props) => {
         if (item[key].log) {
             message = ( <> {rendererStateMessage(item[key])} </> );
         }else{
+            if(key === "ecommerce" && ecommerceExiste) return;
+            if(key === "items" && itemsExiste) return;
+
             if(key !== "logs" && key !== "show_list_id" && (keyIsNaN || !keyIsNaN && checkShowListID)){
                 message = (
                     <ApprovalDisplayTreeViewCollapse
@@ -95,12 +107,12 @@ const ApprovalDisplayTreeView = (props) => {
         return ( <>{message}</> );
     }
 
-    const renderizarItem = (item,collapseID) => {
+    const renderizarItem = (item,collapse_id) => {
         return (
             <>
                 {Object.entries(item).map(([key, array]) => (
                     <>
-                        {rendererExibitionLogic(item,key,array,collapseID)}                        
+                        {rendererExibitionLogic(item,key,array,collapse_id)}                        
                     </>
                 ))}
             </>
@@ -110,9 +122,9 @@ const ApprovalDisplayTreeView = (props) => {
     return (
         <Fragment>
             <ul className="pb-2 pt-2 ml-4 mt-1 mb-1 ">
-                {data.map((key, array) => (
+                {dataTemp.map((key, array) => (
                     <>
-                        {renderizarItem(key,props.collapseID+"_start")}
+                        {renderizarItem(key,collapseID+"_start")}
                     </>
                 ))}
             </ul>

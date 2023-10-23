@@ -71,13 +71,7 @@ var ApprovalDisplayCollapse = function ApprovalDisplayCollapse(_ref) {
     role: "button",
     "aria-expanded": "false",
     "aria-controls": collapseIdTemp
-  }, dataTemp && dataTemp.event), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    "data-te-ripple-init": true,
-    "data-te-ripple-color": "light",
-    className: "float-right text-[1rem] w-auto inline-block rounded bg-primary px-2 pb-2 pt-2.5 text-xs \r font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 \r ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] \r focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] \r focus:outline-none focus:ring-0 active:bg-primary-700 \r active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] \r dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] \r dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] \r dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
-    "class": "fa-regular fa-copy pl-1 pr-1"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, dataTemp && dataTemp.event)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "!visible hidden",
     id: collapseIdTemp,
     "data-te-collapse-item": true
@@ -168,8 +162,8 @@ var ApprovalDisplayListVisualizer = function ApprovalDisplayListVisualizer(_ref)
         data: item,
         collapseId: getNewCollapseID(index)
       }, item.metadata && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
-        className: "ml-4 mr-4 mt-2 "
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("strong", null, "P\xE1gina: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+        className: "ml-4 mr-4 mt-2 text-xs"
+      }, "P\xE1gina: ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
         className: "text-primary transition duration-150 ease-in-out hover:text-primary-500 focus:text-primary-500 active:text-primary",
         href: item.metadata.pageUrl
       }, item.metadata.pageUrl)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ApprovalDisplayTreeView__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -218,21 +212,33 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var ApprovalDisplayTreeView = function ApprovalDisplayTreeView(props) {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(props.data || []),
+var ApprovalDisplayTreeView = function ApprovalDisplayTreeView(_ref) {
+  var data = _ref.data,
+    collapseID = _ref.collapseID;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(data || []),
     _useState2 = _slicedToArray(_useState, 2),
-    data = _useState2[0],
-    setData = _useState2[1];
+    dataTemp = _useState2[0],
+    setDataTemp = _useState2[1];
 
   // Verifica se os ID's devem ser exibidos nas listas de validação 
   var checkShowListID = false;
+  var ecommerceExiste = dataTemp && dataTemp.some(function (objeto) {
+    return objeto.logs && objeto.logs.some(function (log) {
+      return log.ecommerce;
+    });
+  });
+  var itemsExiste = dataTemp && dataTemp.some(function (objeto) {
+    return objeto.ecommerce && objeto.ecommerce.logs && objeto.ecommerce.logs.some(function (log) {
+      return log.items;
+    });
+  });
   var iconList = {
     errorIcon: 'fa-solid fa-circle-xmark mr-1',
     warningIcon: 'fa-solid fa-circle-exclamation mr-1',
     successIcon: 'fa-solid fa-circle-check mr-1'
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    setData(props.data || []);
+    setDataTemp(data || []);
     (0,tw_elements__WEBPACK_IMPORTED_MODULE_1__.initTE)({
       Collapse: tw_elements__WEBPACK_IMPORTED_MODULE_1__.Collapse,
       Ripple: tw_elements__WEBPACK_IMPORTED_MODULE_1__.Ripple
@@ -293,9 +299,9 @@ var ApprovalDisplayTreeView = function ApprovalDisplayTreeView(props) {
     }
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, " ", message);
   };
-  var rendererExibitionLogic = function rendererExibitionLogic(item, key, array, collapseID) {
+  var rendererExibitionLogic = function rendererExibitionLogic(item, key, array, collapse_id) {
     var message = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null);
-    var id_element = "co_".concat(key, "_").concat(collapseID);
+    var id_element = "co_".concat(key, "_").concat(collapse_id);
     var keyIsNaN = isNaN(parseInt(key));
     if (key === "metadata") return;
     if (item[key].hasOwnProperty("show_list_id")) {
@@ -304,6 +310,8 @@ var ApprovalDisplayTreeView = function ApprovalDisplayTreeView(props) {
     if (item[key].log) {
       message = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, " ", rendererStateMessage(item[key]), " ");
     } else {
+      if (key === "ecommerce" && ecommerceExiste) return;
+      if (key === "items" && itemsExiste) return;
       if (key !== "logs" && key !== "show_list_id" && (keyIsNaN || !keyIsNaN && checkShowListID)) {
         message = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_CollapseElement__WEBPACK_IMPORTED_MODULE_2__["default"], {
           id_element: id_element,
@@ -316,18 +324,18 @@ var ApprovalDisplayTreeView = function ApprovalDisplayTreeView(props) {
     }
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, message);
   };
-  var renderizarItem = function renderizarItem(item, collapseID) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, Object.entries(item).map(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 2),
-        key = _ref2[0],
-        array = _ref2[1];
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, rendererExibitionLogic(item, key, array, collapseID));
+  var renderizarItem = function renderizarItem(item, collapse_id) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, Object.entries(item).map(function (_ref2) {
+      var _ref3 = _slicedToArray(_ref2, 2),
+        key = _ref3[0],
+        array = _ref3[1];
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, rendererExibitionLogic(item, key, array, collapse_id));
     }));
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
     className: "pb-2 pt-2 ml-4 mt-1 mb-1 "
-  }, data.map(function (key, array) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, renderizarItem(key, props.collapseID + "_start"));
+  }, dataTemp.map(function (key, array) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, renderizarItem(key, collapseID + "_start"));
   })));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ApprovalDisplayTreeView);
@@ -751,10 +759,10 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
@@ -1007,7 +1015,6 @@ var GA4EcommerceEventValidator = /*#__PURE__*/function () {
         itemsFields = _this$validationRules.itemsFields,
         maxFieldLengths = _this$validationRules.maxFieldLengths,
         valueGreaterThanZero = _this$validationRules.valueGreaterThanZero;
-      var ecommerceData = eventData.ecommerce;
       var validations = {
         event: eventName,
         logs: [],
@@ -1022,193 +1029,204 @@ var GA4EcommerceEventValidator = /*#__PURE__*/function () {
         },
         metadata: eventData.metadata ? JSON.parse(JSON.stringify(eventData.metadata)) : {}
       };
+      var ecommerceData = eventData.ecommerce;
+      if (!ecommerceData) {
+        validations.logs.push(_defineProperty({}, "ecommerce", {
+          log: "Par\xE2metro obrigat\xF3rio <strong>ecommerce</strong> ausente.",
+          status: "error"
+        }));
+      }
+      if (ecommerceData === undefined || ecommerceData === "undefined") {
+        validations.logs.push(_defineProperty({}, "ecommerce", {
+          log: "Par\xE2metro <strong>ecommerce</strong> com valor n\xE3o definido ou inexistente.",
+          status: 'error'
+        }));
+      } else {
+        // Usado para validar os parâmetros obrigatórios presentes no parâmetro ecommerce
+        if (requiredFields) {
+          var _iterator = _createForOfIteratorHelper(requiredFields),
+            _step;
+          try {
+            for (_iterator.s(); !(_step = _iterator.n()).done;) {
+              var field = _step.value;
+              if (!(field in ecommerceData)) {
+                validations.ecommerce.logs.push(_defineProperty({}, field, {
+                  log: "Par\xE2metro obrigat\xF3rio <strong>".concat(field, "</strong> ausente."),
+                  status: 'error'
+                }));
+                continue;
+              }
+            }
+          } catch (err) {
+            _iterator.e(err);
+          } finally {
+            _iterator.f();
+          }
+        }
+        // Usado para validar se no parâmetro ecommerce existem itens faltando.
+        for (var _field in ecommerceData) {
+          if (_field === "metadata") continue;
+          // console.log("valor",ecommerceData[field])
 
-      // Usado para validar os parâmetros obrigatórios presentes no parâmetro ecommerce
-      if (requiredFields) {
-        var _iterator = _createForOfIteratorHelper(requiredFields),
-          _step;
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var field = _step.value;
-            if (!(field in ecommerceData)) {
-              validations.ecommerce.logs.push(_defineProperty({}, field, {
-                log: "Par\xE2metro obrigat\xF3rio <strong>".concat(field, "</strong> ausente."),
+          if (ecommerceData[_field] === undefined || ecommerceData[_field] === "undefined") {
+            validations.ecommerce.logs.push(_defineProperty({}, _field, {
+              log: "Par\xE2metro <strong>".concat(_field, "</strong> com valor n\xE3o definido ou inexistente."),
+              status: 'warning'
+            }));
+            continue;
+          }
+          if (optionalFields && requiredFields) {
+            if (![].concat(_toConsumableArray(optionalFields), _toConsumableArray(requiredFields), ["items"]).includes(_field)) {
+              validations.ecommerce.logs.push(_defineProperty({}, _field, {
+                log: "Par\xE2metro <strong>".concat(_field, "</strong> n\xE3o foi encontrado."),
                 status: 'error'
               }));
               continue;
             }
           }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
-        }
-      }
-      // Usado para validar se no parâmetro ecommerce existem itens faltando.
-      for (var _field in ecommerceData) {
-        if (_field === "metadata") continue;
-        // console.log("valor",ecommerceData[field])
-
-        if (ecommerceData[_field] === undefined || ecommerceData[_field] === "undefined") {
-          validations.ecommerce.logs.push(_defineProperty({}, _field, {
-            log: "Par\xE2metro <strong>".concat(_field, "</strong> com valor n\xE3o definido ou inexistente."),
-            status: 'warning'
-          }));
-          continue;
-        }
-        if (optionalFields && requiredFields) {
-          if (![].concat(_toConsumableArray(optionalFields), _toConsumableArray(requiredFields), ["items"]).includes(_field)) {
-            validations.ecommerce.logs.push(_defineProperty({}, _field, {
-              log: "Par\xE2metro <strong>".concat(_field, "</strong> n\xE3o foi encontrado."),
-              status: 'error'
-            }));
-            continue;
-          }
-        }
-        if (maxFieldLengths && ecommerceData) {
-          if (maxFieldLengths[_field] && ecommerceData[_field].length > maxFieldLengths[_field]) {
-            validations.ecommerce.logs.push(_defineProperty({}, _field, {
-              log: "Par\xE2metro <strong>".concat(_field, "</strong> excede o limite de caracteres."),
-              status: 'warning'
-            }));
-            continue;
-          }
-        }
-
-        /*
-        if (typeof ecommerceData[field] === 'string' && String(ecommerceData[field]).trim() === '') {
-            validations.ecommerce.logs.push({
-                [field]: { 
-                    log: `Parâmetro <strong>${field}</strong> está recebendo um texto vazio.`,
-                    status: 'error',
-                }
-            });
-            continue;
-        }*/
-      }
-
-      // Verifica se os parâmetros marcados para receber valores maiores que zero, fazem parte da lista.
-      if (valueGreaterThanZero) {
-        var _iterator2 = _createForOfIteratorHelper(valueGreaterThanZero),
-          _step2;
-        try {
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var _field2 = _step2.value;
-            if (typeof ecommerceData[_field2] === 'number' && ecommerceData[_field2] <= 0) {
-              validations.ecommerce.logs.push(_defineProperty({}, _field2, {
-                log: "Par\xE2metro <strong>".concat(_field2, "</strong> deve ser maior que zero."),
-                status: 'error'
+          if (maxFieldLengths && ecommerceData) {
+            if (maxFieldLengths[_field] && ecommerceData[_field].length > maxFieldLengths[_field]) {
+              validations.ecommerce.logs.push(_defineProperty({}, _field, {
+                log: "Par\xE2metro <strong>".concat(_field, "</strong> excede o limite de caracteres."),
+                status: 'warning'
               }));
+              continue;
             }
           }
-        } catch (err) {
-          _iterator2.e(err);
-        } finally {
-          _iterator2.f();
+
+          /*
+          if (typeof ecommerceData[field] === 'string' && String(ecommerceData[field]).trim() === '') {
+              validations.ecommerce.logs.push({
+                  [field]: { 
+                      log: `Parâmetro <strong>${field}</strong> está recebendo um texto vazio.`,
+                      status: 'error',
+                  }
+              });
+              continue;
+          }*/
         }
-      }
 
-      // Verifica se existem parâmetros no evento dentro de ecommerce, 
-      // caso o parâmetro não possua um log de erro, criamos um log 
-      // informando que ele foi implementado com sucesso no evento.
-      var _loop = function _loop(key) {
-        if (key === 'items') return "continue";
-        // Verifica se a chave não está presente nos logs de validação
-        var isKeyValidated = validations.ecommerce.logs.some(function (log) {
-          return log.hasOwnProperty(key);
-        });
+        // Verifica se os parâmetros marcados para receber valores maiores que zero, fazem parte da lista.
+        if (valueGreaterThanZero) {
+          var _iterator2 = _createForOfIteratorHelper(valueGreaterThanZero),
+            _step2;
+          try {
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              var _field2 = _step2.value;
+              if (typeof ecommerceData[_field2] === 'number' && ecommerceData[_field2] <= 0) {
+                validations.ecommerce.logs.push(_defineProperty({}, _field2, {
+                  log: "Par\xE2metro <strong>".concat(_field2, "</strong> deve ser maior que zero."),
+                  status: 'error'
+                }));
+              }
+            }
+          } catch (err) {
+            _iterator2.e(err);
+          } finally {
+            _iterator2.f();
+          }
+        }
 
-        // Se não estiver validado, adiciona à lista de chaves ausentes
-        if (!isKeyValidated) {
-          validations.ecommerce.logs.push(_defineProperty({}, key, {
-            log: requiredFields.includes(key) ? "O Campo obrigat\xF3rio <strong>".concat(key, "</strong> implementado com sucesso!") : "O Campo ".concat(key, " implementado com sucesso!"),
-            status: 'success'
+        // Verifica se existem parâmetros no evento dentro de ecommerce, 
+        // caso o parâmetro não possua um log de erro, criamos um log 
+        // informando que ele foi implementado com sucesso no evento.
+        var _loop = function _loop(key) {
+          if (key === 'items') return "continue";
+          // Verifica se a chave não está presente nos logs de validação
+          var isKeyValidated = validations.ecommerce.logs.some(function (log) {
+            return log.hasOwnProperty(key);
+          });
+
+          // Se não estiver validado, adiciona à lista de chaves ausentes
+          if (!isKeyValidated) {
+            validations.ecommerce.logs.push(_defineProperty({}, key, {
+              log: requiredFields.includes(key) ? "O Campo obrigat\xF3rio <strong>".concat(key, "</strong> implementado com sucesso!") : "O Campo ".concat(key, " implementado com sucesso!"),
+              status: 'success'
+            }));
+          }
+        };
+        for (var key in ecommerceData) {
+          var _ret = _loop(key);
+          if (_ret === "continue") continue;
+        }
+
+        // Validação dos parâmetros de items.
+        var itemsToValidate = eventData.ecommerce.items;
+        if (!itemsToValidate) {
+          validations.ecommerce.logs.push(_defineProperty({}, "items", {
+            log: "Par\xE2metro obrigat\xF3rio <strong>items</strong> ausente.",
+            status: "error"
           }));
-        }
-      };
-      for (var key in ecommerceData) {
-        var _ret = _loop(key);
-        if (_ret === "continue") continue;
-      }
-
-      // Validação dos parâmetros de items.
-      var itemsToValidate = eventData.ecommerce.items;
-      if (itemsToValidate === null) {
-        validations.ecommerce.logs.push({
-          items: {
-            log: "Par\xE2metro <strong>items</strong> est\xE1 recebendo um valor nulo.",
-            status: 'error'
-          }
-        });
-      } else if (itemsToValidate === undefined || itemsToValidate === "undefined") {
-        validations.ecommerce.logs.push({
-          items: {
-            log: "Par\xE2metro <strong>items</strong> est\xE1 recebendo um valor indefinido ou inexistente.",
-            status: 'error'
-          }
-        });
-      } else {
-        // Valida se items é de fato um array
-        if (!Array.isArray(itemsToValidate)) {
+        } else if (itemsToValidate === undefined || itemsToValidate === "undefined") {
           validations.ecommerce.logs.push({
             items: {
-              log: "Par\xE2metro <strong>items</strong> deve receber uma lista de par\xE2metros.",
+              log: "Par\xE2metro <strong>items</strong> est\xE1 recebendo um valor indefinido ou inexistente.",
               status: 'error'
             }
           });
         } else {
-          // Valida se items possui mais de um parametros
-          if (itemsToValidate.length <= 0) {
+          // Valida se items é de fato um array
+          if (!Array.isArray(itemsToValidate)) {
             validations.ecommerce.logs.push({
               items: {
                 log: "Par\xE2metro <strong>items</strong> deve receber uma lista de par\xE2metros.",
                 status: 'error'
               }
             });
-          }
-        }
-
-        // Valida se ecommerce possui parâmetros
-        // if(validations.ecommerce.logs.length <= 0){
-        //     // incluir futuramente a nota "Não foi encontrado nenhum <strong>parâmetro</strong> no evento, exceto <strong>items</strong>!"
-        //     validations.ecommerce.logs.push({                     
-        //         log: `Não foi encontrado nenhum <strong>parâmetro</strong> no evento!`,
-        //         status: 'error',                    
-        //     });
-        // }
-
-        // Validação dos parâmetros de todos os itens na lista.
-        var groupItems = {};
-        if (Array.isArray(itemsToValidate)) {
-          var _iterator3 = _createForOfIteratorHelper(itemsToValidate),
-            _step3;
-          try {
-            var _loop2 = function _loop2() {
-              var item = _step3.value;
-              index = itemsToValidate.findIndex(function (e) {
-                return e === item;
+          } else {
+            // Valida se items possui mais de um parametros
+            if (itemsToValidate.length <= 0) {
+              validations.ecommerce.logs.push({
+                items: {
+                  log: "Par\xE2metro <strong>items</strong> deve receber uma lista de par\xE2metros.",
+                  status: 'error'
+                }
               });
-              groupItems = _this.validateItem(item, index, groupItems);
-            };
-            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-              var index;
-              _loop2();
             }
-          } catch (err) {
-            _iterator3.e(err);
-          } finally {
-            _iterator3.f();
           }
-        }
-        groupItems = Object.values(groupItems);
-        // Verifica se foram encontrados itens na lista
-        if (groupItems.length > 0) {
-          validations.ecommerce.items.logs = groupItems;
-        } else {
-          validations.ecommerce.items.logs.push({
-            log: "N\xE3o foi encontrado nenhum <strong>item</strong> no evento!",
-            status: 'error'
-          });
+
+          // Valida se ecommerce possui parâmetros
+          // if(validations.ecommerce.logs.length <= 0){
+          //     // incluir futuramente a nota "Não foi encontrado nenhum <strong>parâmetro</strong> no evento, exceto <strong>items</strong>!"
+          //     validations.ecommerce.logs.push({                     
+          //         log: `Não foi encontrado nenhum <strong>parâmetro</strong> no evento!`,
+          //         status: 'error',                    
+          //     });
+          // }
+
+          // Validação dos parâmetros de todos os itens na lista.
+          var groupItems = {};
+          if (Array.isArray(itemsToValidate)) {
+            var _iterator3 = _createForOfIteratorHelper(itemsToValidate),
+              _step3;
+            try {
+              var _loop2 = function _loop2() {
+                var item = _step3.value;
+                index = itemsToValidate.findIndex(function (e) {
+                  return e === item;
+                });
+                groupItems = _this.validateItem(item, index, groupItems);
+              };
+              for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+                var index;
+                _loop2();
+              }
+            } catch (err) {
+              _iterator3.e(err);
+            } finally {
+              _iterator3.f();
+            }
+          }
+          groupItems = Object.values(groupItems);
+          // Verifica se foram encontrados itens na lista
+          if (groupItems.length > 0) {
+            validations.ecommerce.items.logs = groupItems;
+          } else {
+            validations.ecommerce.items.logs.push({
+              log: "N\xE3o foi encontrado nenhum <strong>item</strong> no evento!",
+              status: 'error'
+            });
+          }
         }
       }
       return validations;
@@ -1376,14 +1394,13 @@ function DatalayerValidatorScreen() {
       setDataLayer(data || []);
     }
   }
-  function requestUpdateDataLayer() {
-    chrome.runtime.sendMessage({
-      action: 'get_datalayer'
-    }, function (response) {
-      UpdateDataLayer(response);
-      console.log("get_datalayer ", response);
-    });
-  }
+
+  // function requestUpdateDataLayer(){
+  //     chrome.runtime.sendMessage({ action: 'get_datalayer' }, function(response){
+  //         UpdateDataLayer(response);
+  //         console.log("get_datalayer ",response)
+  //     });
+  // }
 
   // Requisita uma atualização da camada de dados quando o usuário clica no icone da extensão.
   chrome.runtime.sendMessage({
